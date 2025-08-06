@@ -30,6 +30,7 @@ After we realized we could retrieve the robot's heading from the IMU, it sparked
 
 // Why didn't we switch to roadrunner or pedro path here? and Why we developed our own?
 
+We were persistent about making a fast path follower
 - We were interested in path following and we wanted to further the field in FTC
 - To intuitively learn, hands-on, how path following works in robotics
 - Potentially find faster or more efficient solutions
