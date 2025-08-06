@@ -1,6 +1,6 @@
 <h1>
   The History and Evolution<br>
-  <span style="font-size: 75%;">of Our Path Follower, Black Ice</span>
+  <sub>of Our Path Follower, Black Ice</sub>
 </h1>
 
 ### Overview
