@@ -349,6 +349,8 @@ Our drive power formula is purely proportional, subtracting the predicted brakin
 
 All code developed by Jacob Ophoven with help of Coach Andy and members of the FTC community.
 Early Discord Supporters: alexreman45
+Thanks to Pedro Path developers, especially Havish from 12808 RevAmped Robotics, for supporting my project and wanting to implementing.
+We are project lead on decel on pedro path as well as beta testers.
 
 Smoother Transitions: Ensuring less jerky motions for precision-intensive tasks.
 Faster Execution: Reducing time spent in path planning and execution.
