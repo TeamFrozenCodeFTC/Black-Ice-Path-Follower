@@ -36,11 +36,11 @@ Used goBILDA pinpoint odometry to move toward a target and then relied on zero p
 
 Using separate non-powered wheels to track distance allowed for much more speed because we could apply braking force opposite to the robot's motion and didn't have to worry about if the powered wheels slightly slipped.
 
-So far, this prototype could only go from point to point; it could not path follow with lines or curves.
+So far, this prototype could only go from point to point; it could not follow paths with lines or curves.
 
 ### Preventing Overshoot
 
-This obviously would instantly overshoot the target position because it would only brake after it reached the target position. To fix this, we decided to create a program that drives the robot at different speeds, turns on zero power brake mode, and calculates the distance the robot took to brake. With those data points we found that it was in the form of `ax^2 + bx` so we used quadratic regression, in that form, to derive a function that accurately predicts the required braking distance at any speed.
+This would obviously overshoot the target position instantly because it would only brake after reaching the target position. To fix this, we decided to create a program that drives the robot at different speeds, turns on zero power brake mode, and calculates the distance the robot took to brake. With those data points, we found that it was in the form of `ax^2 + bx` so we used quadratic regression, in that form, to derive a function that accurately predicts the required braking distance at any speed.
 
 We commonly found our coefficients to be around `a=0.001` and `b=0.07`.
 
@@ -77,7 +77,7 @@ With later modifications to this version, we also created two distinct braking  
 
 Made follower using a lookahead based off the predicted braking displacement. Followed based of a bunch of points spread along the path.
 
-Worked well, however, points were limited to about 1-2 inches apart or else the robot's reaction time would be slower than the robot's loop time. Looking back at this now, we realized we could have updated our follower and skipped several points in the same loop instead of waiting for the next loop for each point. However, it lacked accuracy and option of motion profiles for smooth deceleration.
+Worked well, however, points were limited to about 1-2 inches apart, or else the robot's reaction time would be slower than the robot's loop time. Looking back at this now, we realized we could have updated our follower and skipped several points in the same loop instead of waiting for the next loop for each point. However, it lacked accuracy and the option of motion profiles for smooth deceleration.
 
 ## v5.0 - Sophisticated Follower
 ###### 2025 off-season.
@@ -85,11 +85,10 @@ Worked well, however, points were limited to about 1-2 inches apart or else the 
 This is currently the latest version.
 This is a more sophisticated follower that can follow more than just points, including continuous paths such as Bézier curves and lines. It uses centripetal, translational, heading, and drive vectors (prioritized in that order) for smooth and controlled motion. Our drive vector can also follow custom velocity profiles through PIDFs with momentum compensation.
 
-
 ### PredictiveBrakingController = Empirical PID controller with Quadratic Damping
 It was at this point that we realized our predictive braking controller was essentially an empirical form of a Proportional-Derivative (PD) controller with added quadratic damping.
 ```
-outputPower = error - a*velocity*abs(velocity) + b*velocity
+outputPower = error - a*velocity*abs(velocity) - b*velocity
 ```
 
 The term `b * velocity` acts as a derivative component, since the target is constant and the rate of change of position is `-velocity`.
@@ -103,23 +102,11 @@ outputPower = error + dTerm + quadraticDamping
 ```
 The combined damping terms `dTerm + quadraticDamping` represent the predicted overshoot due to momentum and the robot's braking constraints, and are subtracted from the error to improve control.
 
-## So what if the difference from Pedro Path?
-1. We include a quadratic damping term in our translational PID, making it significantly more aggressive, accurate, while minimizing premature deceleration for faster deceleration. Learn about why this is here.
-2. Velocity Motion Profiles
-3. Easier Path Creation
-   - Do not have to specify the previous starting point for going from one point to another
-   - .from(Pose), fromPreviousTarget() .fromCurrentPose() 
-   - .currentPoseTo() allows you to create dynamic paths that go towards at certain point from the current pose. Very useful for teleOp macros.
-3. Path Continuity not required
-
+Why does the quadratic-damping work so well?
+- triggers internal back EMF
+- 
 We would have never knew to add a quadratic damping term if it were not for the previous iterations. Using Zero Power Braking Mode to set that goal of stopping as fast and as accurate as possible turned into great.
-Those vectors may sound similar to pedro path but the previous version of our follower were necessary for us to discover and develop the unique thing about our follower. The deceleration and aggressively smooth positional control with the help of a quadratic damping term.
 
-Why we added a quadratic damping term?
-When the robot applys negative power/braking power it isn't linear deceleration , etc
-
-This is similar to Pedro Path but our translational doesn't just use a positional PIDs but it uses our predictive braking controller which allows us to tune our proportional much more aggressively, making our follower more accurate and much faster.
-We also made constructing paths a lot less repetitive than pedro path.
 We have been partnering with Pedro Path however to implement some aspects of Black Ice into Pedro Path or even just add a separate fork of pedro path with our follower but will all of the access to the localization and tuning.
 
 Later added motion profiles with target velocities for the drive vector to smoothly slow down before the predictive braking controller
@@ -128,7 +115,6 @@ todo back-emf, lower power braking, etc Predictive EMF Braking
 
 Modeled braking displacement with kP/kQuad terms and actively applied reverse power based on back-EMF to both slow and correct position error.
 
-Later on we would realize that just this term in our future predictive positional controller was just a more empirical version of the Derivative term. But the `a` quadratic term allows for a much more accurate and aggressive positional controller because it is more closely related to how the robot actually brakes. A simple PID positional controller can work if you tune the deceleration to be the robot's naturally deceleration but with more aggressive PID controllers it began to too harshly correct at lower velocities and overshoot at higher velocities.
 
 // apply constant negative power reverse to the wheel does not give accurate linear deceleration this is due the internal emf braking.
 
