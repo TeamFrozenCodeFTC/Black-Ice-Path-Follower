@@ -1,6 +1,6 @@
 # Our Key Innovation, Quadratic-Damped PID
 
-Our key innovation about our follower is our quadratic-damped PID. We include this quadratic damping term in our translational PID, making it nearly **5x faster** at decelerating, more aggressive, and accurate while minimizing premature deceleration for faster deceleration. 
+Our key innovation about our follower is our quadratic-damped PID. We include this quadratic damping term in our translational PID, allowing it to be nearly **5x faster** at decelerating, more aggressive, and accurate while minimizing premature deceleration for faster deceleration. 
 You can learn about how we came up with this idea here. or our first empirical approach
 
 Pseudo Code of PD controller with quadratic-damping
