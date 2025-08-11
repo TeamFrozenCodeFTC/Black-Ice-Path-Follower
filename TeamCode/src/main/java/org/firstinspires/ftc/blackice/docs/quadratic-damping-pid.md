@@ -1,10 +1,10 @@
-# Our Key Innovation, Quadratic Damping PID
+# Our Key Innovation, Quadratic-Damped PID
 to make use of back-EMF braking
 
 Our key innovation about our follower is our quadratic damping PID. We include this quadratic damping term in our translational PID, making it significantly more aggressive, accurate, while minimizing premature deceleration for faster deceleration. 
 You can learn about how we came up with this idea here. or our first empirical approach
 
-Pseudo Code of PD controller with quadraticDamping
+Pseudo Code of PD controller with quadratic-damping
 ```
 error = target - current
 derivative = -kD * velocity
@@ -29,6 +29,53 @@ $$ \frac{d}{dt}(\text{error}) = -\frac{d}{dt}(\text{current}_{\text{pos}}) = -\t
 Therefore, when the target position is fixed, the derivative of the position error is simply the **negative of the current velocity**.
 
 
+
+PredictiveBrakingController = Empirical PID controller with Quadratic Damping
+It was at this point that we realized our predictive braking controller was essentially an empirical form of a Proportional-Derivative (PD) controller with added quadratic damping.
+
+outputPower = error - a*velocity*abs(velocity) - b*velocity
+The term b * velocity acts as a derivative component, since the target is constant and the rate of change of position is -velocity.
+
+Expanded form:
+
+error = target - current
+dTerm = -kD * velocity
+quadraticDamping = -kQ * velocity * |velocity|
+outputPower = error + dTerm + quadraticDamping
+The combined damping terms dTerm + quadraticDamping represent the predicted overshoot due to momentum and the robot's braking constraints, and are subtracted from the error to improve control.
+
+
+Why does the quadratic-damping work?
+- whenever you reverse the power of the wheels, it reverses the internal back-EMF, which causes the motor to brake fast using it's own momentum even if the power is very small such as -0.00001. This means that the faster the wheel was moving in the first place, the more braking power it has. This is exactly what zero power brake mode uses to brake. In a perfect world this would be force proportional to velocity, however when the robot's powered wheels are braking and stopped, the robot does not decelerate perfectly linearly. The friction of braking actually makes the ratio of velocity to braking distance non-linear. At first we were just trying to predict zero power brake mode, and that required us to use quadratic regression to get a non-linear prediction with a quadratic-damping term. If you had a PID that was less fast and aggressive and it coasted to its target, then you wouldn't need the quadratic-damping. It is only for high-speed replication of the robot's real braking model.
+
+
+We would have never knew to add a quadratic damping term if it were not for the previous iterations. Using Zero Power Braking Mode to set that goal of stopping as fast and as accurate as possible turned into great.
+
+We have been partnering with Pedro Path however to implement some aspects of Black Ice into Pedro Path or even just add a separate fork of pedro path with our follower but will all of the access to the localization and tuning.
+
+Later added motion profiles with target velocities for the drive vector to smoothly slow down before the predictive braking controller
+
+todo back-emf, lower power braking, etc Predictive EMF Braking
+
+Modeled braking displacement with kP/kQuad terms and actively applied reverse power based on back-EMF to both slow and correct position error.
+
+// apply constant negative power reverse to the wheel does not give accurate linear deceleration this is due the internal emf braking.
+
+//Made separate braking displacement models for forward vs lateral movement with mecanum wheels. but after testing it works to just use the same model for both axis since it is the equivalent of halfing different PIDs for each axis which is a bit unnecessary and just requires more tuning. There is support for this tho.
+
+Things to note: power reverse of back-EMF Modeled braking distance with kP/kQuad terms and actively applied reverse power based on back-EMF to both slow and correct position error.
+
+// FIXME Things to note after testing: our model basically simulated the zero power brake mode but with correction. the zero power brake mode uses back-EMF to make the wheels stop spinning and a fact is that if you just reverse the direction of the wheels for example form +1 to -0.001 it will basically behave like zero power brake mode until it gets to lower velocities where -0.001 doesn't do much and where a power like -0.3 would slow down more at lower velocities.
+
+//Predictive back-EMF Braking
+
+
+
+
+
+
+Why does the Quadratic-Damping work?
+triggers internal back EMF and more accurately models how the robot brakes because it cannot supply a constant force when friction dominates
 
 title with PID controller with QuadraticDamping, and then explain more empirically with predicted braking displacement
 
