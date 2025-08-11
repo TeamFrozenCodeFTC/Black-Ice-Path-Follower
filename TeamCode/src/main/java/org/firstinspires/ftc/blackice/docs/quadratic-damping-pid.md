@@ -31,17 +31,16 @@ $\frac{d}{dt}(error) = -\frac{d}{dt}(current_{pos}) = -velocity$
 
 Therefore, when the target position is fixed, the derivative of the position error is simply the **negative of the current velocity**.
 
+## Why Quadratic Damping Is Needed?
+We wanted to brake as fast as zero power brake mode, so that required quadratic regression to model the realistic, non-linear braking behavior of the robot with a quadratic-damped term. We later realized that applying small amounts of reverse power to the wheels uses the same system as zero power brake mode, but allows us to correct and control the robot's position. If you use a less aggressive PID controller that simply coasts to the target, quadratic damping isn’t necessary. It’s only required when you want high speed and braking that requires replicating the robot’s real braking dynamics at high speeds.
 
-## Why does the quadratic-damping work?
-### Back-EMF
+### Why is the Braking Non-Linear?
 When you reverse the motor power, the motor’s internal back-EMF also reverses. This causes the motor to brake rapidly using its own momentum, even with very small power inputs like -0.00001. Essentially, the faster the wheel was initially spinning, the stronger the braking force generated. This is exactly how the zero power brake mode brakes.
 
-In an ideal scenario, the braking force would be directly proportional to velocity. However, when the robot’s powered wheels are braking to a stop, the deceleration is not perfectly linear. The friction involved in braking causes the relationship between velocity and braking distance to become non-linear.
+In an ideal scenario, the braking force would be directly proportional to velocity. However, when the robot’s powered wheels are braking to a stop, the deceleration is not perfectly linear. The friction involved in braking causes the relationship between velocity and braking distance to become **non-linear**.
 
-Initially, our goal was to accurately model zero power brake mode, which required a quadratic regression to capture this non-linear behavior with a quadratic damping term. We later realized that applying small amounts of reverse power to the wheels uses the same system as zero power brake mode but allows us to correct and control the robot's position. If you use a less aggressive PID controller that simply coasts to the target, quadratic damping isn’t necessary. It’s only required when you want high speed and braking that requires replicating the robot’s real braking dynamics at high speeds.
-
-## How much difference does it make?
-Other libraries, such as Pedro Path and Roadrunner, rely on less aggressive, slower PID controllers to coast to the target position. This is more predictable constant deceleration of around `-40in/s` or `45in` of distance to stop at `60 in/s`. However, if you use a more aggressive PID controller with quadratic-damping that makes use of back-EMF, you can get much faster deceleration of around `10 in` of braking at `60in/s`. This is nearly 5 times faster deceleration, plus the extra time you have to accelerate instead of braking.
+## How much difference does the Quadratic Damping make?
+Other libraries, such as Pedro Path and Roadrunner, rely on less aggressive, slower PID controllers to coast to the target position. This is a more predictable constant deceleration of around `-40in/s` or `45in` of distance to stop at `60 in/s`. However, if you use a more aggressive PID controller with quadratic-damping that makes use of back-EMF, you can get much faster deceleration of around `10 in` of braking at `60in/s`. This is nearly **5 times faster deceleration**, plus the extra time you have to accelerate instead of braking.
 
 Pros of Black Ice
 - faster
