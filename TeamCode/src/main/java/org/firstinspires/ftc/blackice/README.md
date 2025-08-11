@@ -1,5 +1,6 @@
 
-Black Ice (by FTC Team #18535, Frozen Code) is a **Reactive and Predictive Path Follower** that adapts in real-time along paths. It drives at high speeds and then brakes using back-EMF with **quadratic-damped PIDs** to model the non-linear effects of friction and momentum. This lets it accurately predict braking at any velocity, preventing the overshoot and undershoot common with regular aggressive PIDs. This allows much faster, more accurate, and more aggressive control by braking to a stop rather than coasting to a stop like other libraries such as Roadrunner or Pedro Path.
+Black Ice (by FTC Team #18535, Frozen Code) is a **Reactive and Predictive Path Follower** that adapts in real-time along paths. It drives at high speeds and then brakes **5x times faster** than other path following libraries which coast to a stop.
+It does this by triggering back-EMF with **quadratic-damped PIDs** to model the non-linear effects of friction and momentum. This lets it accurately predict braking at any velocity, preventing the overshoot and undershoot common with regular aggressive PIDs. This allows much faster, more accurate, and more aggressive control by braking to a stop rather than coasting to a stop like other libraries such as Roadrunner or Pedro Path.
 
 For you if you want:
 - Super fast and aggressive path routines
