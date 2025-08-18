@@ -20,7 +20,7 @@ Black Ice achieves this by using [**quadratic-damped PIDs**](https://github.com/
 ## How much difference does the Quadratic Damping make?
 Other libraries (e.g. Roadrunner, Pedro Path) rely on gentle PID + coasting:
 
-- ~`-40 in/s²` → needs ~`45in` to stop from `60 in/s`
+- Coasting (~`-40 in/s²`) needs ~`45in` to stop from `60 in/s`
 
 With quadratic damping + back-EMF braking:
 
