@@ -47,7 +47,7 @@ Initially, the robot overshot because braking occurred only after reaching the t
 We commonly found our coefficients to be around `a=0.001` and `b=0.07`.
 
 - The `a` term accounts for friction and momentum when braking. This makes it much more accurate at high velocities when friction is more dominant than the wheels' braking force.
-- the `b` term is basically the robot's braking force from the wheels. Later on, we would realize that just this term in our future predictive braking controller was just a more empirical version of the Derivative term in PIDs.
+- the `b` term is basically the robot's braking force from the wheels. Later on, we would realize that this term was just a more empirical version of the derivative term in PIDs.
 
 In this prototype version, it would just turn on zero power brake mode if the distance was greater than the distance remaining to the target point. This worked okay, but it could not correct while it was braking. In next prototype version we would fix this issue by turning it into a simple proportional controller.
 
