@@ -6,8 +6,8 @@ You can learn about how we came up with this idea here. or our first empirical a
 Pseudo Code of PD controller with quadratic-damping
 ```
 error = target - current
-derivative = -kD * velocity
-quadraticDamping = -kQ * velocity * abs(velocity)
+derivative = kD * -velocity
+quadraticDamping = kQ * -velocity * abs(velocity)
 proportional = error * proportionalConstant
 outputPower = proportional + derivative + quadraticDamping
 ```
