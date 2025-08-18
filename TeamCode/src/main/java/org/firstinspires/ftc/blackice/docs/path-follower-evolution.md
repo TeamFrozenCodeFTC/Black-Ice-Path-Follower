@@ -51,6 +51,8 @@ We commonly found our coefficients to be around `a=0.001` and `b=0.07`.
 
 In this prototype version, it would just turn on zero power brake mode if the distance was greater than the distance remaining to the target point. This worked okay, but it could not correct while it was braking. In next prototype version we would fix this issue by turning it into a simple proportional controller.
 
+[Why is the Braking Distance Non-Linear?](https://github.com/TeamFrozenCodeFTC/Black-Ice-Path-Follower/blob/main/TeamCode/src/main/java/org/firstinspires/ftc/blackice/docs/quadratic-damping-pid.md#why-is-the-braking-non-linear)
+
 ## v3.0 - Corrective Braking Using a Quadratic-Damped PID
 ###### Final version used in the 2024–2025 season, first called Black-Ice at our second competition, and also used at our state championship.
 
