@@ -79,8 +79,6 @@ public class Example extends LinearOpMode {
 2. We were **interested** in path following, and we wanted to intuitively **learn**, hands-on, how path following works.
 3. We wanted more **customization**, modularization, and less boilerplate when building paths and routines.
 
-It was worth creating our own path follower because we came up with adding a quadratic-damping term to our translational PID, which allows it to be nearly 5x faster at decelerating.
-We would have never knew to add a quadratic damping term if it were not for creating our own path follower and the mini versions of it and previous iterations. Using Zero Power Braking Mode to set that goal of stopping as fast and as accurate as possible turned into great.
 It was worth creating our own path follower because it led us to add a quadratic-damping term to our translational PID. This made the system nearly five times faster at decelerating. We never would have discovered this approach without building our own follower with all the eariler prototype and iterations. Setting the goal of stopping as quickly and accurately as possible, using Zero Power Brake Mode as inspiration, pushed us to that breakthrough.
 
 # Credits
