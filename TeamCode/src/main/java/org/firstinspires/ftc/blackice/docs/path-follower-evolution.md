@@ -5,10 +5,10 @@
 
 ### Prototype Versions
 
-- [v1.0 – Wheel Encoder + IMU](#v10---wheel-encoder--imu)
-- [v2.0 - Odometry Wheels + ZeroPowerBrakeMode Stop Prediction](#v20---odometry-wheels--zeropowerbrakemode-stop-prediction)
+- [v1.0 – **Basic, Autonomous Mecanum Drive** Using Wheel Encoder and IMU Heading Lock](#v10---wheel-encoder--imu)
+- [v2.0 - **Predictive Braking** Using Odometry Wheels and Zero Power Brake Mode](#v20---odometry-wheels--zeropowerbrakemode-stop-prediction)
 - [v3.0 - Corrective Braking Using a Quadratic-Damped PID](#v30---corrective-braking-using-a-quadratic-damped-pid)
-- [v4.0 – Dynamic Lookahead Follower](#v40---dynamic-lookahead-follower)
+- [v4.0 – **Dynamic Lookahead Path Follower** for Lines and Curves](#v40---dynamic-lookahead-follower)
 - [v5.0 – Sophisticated Path Follower](#v50---sophisticated-follower)
   - translational, drive, heading, and deceleration profiles
 
@@ -99,11 +99,11 @@ Our drive vector can also follow custom velocity profiles and slower deceleratio
 ### PredictiveBrakingController = Empirical PID controller with Quadratic Damping
 It wasn't until this point that we realized our predictive braking controller was essentially an empirical form of a Proportional-Derivative (PD) controller with added quadratic damping. 
 ```
-outputPower = error - a*velocity*abs(velocity) - b*velocity
+predictedBrakingDisplacement = a*velocity*abs(velocity) + b*velocity
+predictedPositionAfterBraking = current + predictedBrakingDisplacement
+error = target - predictedPositionAfterBraking
+power = error * proportionalConstant
 ```
-
-The term `b * velocity` acts as a derivative component, since the target is constant and the rate of change of position is `-velocity`. See the proof [here](https://github.com/TeamFrozenCodeFTC/Black-Ice-Path-Follower/blob/main/TeamCode/src/main/java/org/firstinspires/ftc/blackice/docs/quadratic-damping-pid.md#how-does--velocity--derivative-term-in-pid).
-
 Expanded form:
 ```
 error = target - current
@@ -111,4 +111,7 @@ derivative = kD * -velocity
 quadraticDamping = kQ * -velocity * abs(velocity)
 outputPower = error + derivative + quadraticDamping
 ```
-The combined damping terms `derivative + quadraticDamping` represent the predicted overshoot due to momentum and the robot's braking constraints, and are subtracted from the error to improve control. In our code, we call `kD`: `kBraking` and `kQ`: `kFriction`
+
+The term `b * velocity` acts as a derivative component, since the target is constant and the rate of change of position is `-velocity`. See the proof [here](https://github.com/TeamFrozenCodeFTC/Black-Ice-Path-Follower/blob/main/TeamCode/src/main/java/org/firstinspires/ftc/blackice/docs/quadratic-damping-pid.md#how-does--velocity--derivative-term-in-pid).
+
+The combined damping terms `derivative + quadraticDamping` represent the predicted overshoot due to momentum and the robot's braking constraints, and are subtracted from the error to prevent overshoot and make the controller predictive. In our code, we call `kD`: `kBraking` and `kQ`: `kFriction`
