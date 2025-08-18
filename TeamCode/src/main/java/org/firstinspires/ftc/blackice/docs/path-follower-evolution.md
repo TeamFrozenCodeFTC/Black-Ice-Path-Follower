@@ -17,9 +17,9 @@ The beginnings of Black Ice started in our first season, INTO THE DEEP 2024-2025
 ## v1.0 - Wheel Encoder + IMU
 ###### Used in our first _ever_ competition in December, 2024.</span>
 
-In auto, it combined a single wheel encoder to estimate linear displacement with an IMU for heading lock. In tele-op, it used the internal IMU to transform a target field-relative vector into a robot-relative vector.
+In auto, it combined a single wheel encoder to estimate linear displacement with an IMU for heading lock. In tele-op, it used the internal IMU to transform a target, field-relative vector into a robot-relative vector.
 
-Once the robot reached the target position, it would stop by setting the power to zero on [zero power brake mode](). We were limited to about 50% power since any faster would make the robot overshoot the target and could make the encoder wheel slip. Movement was basic but multi-directional with our mecanum wheels. Lacked speed and accuracy and could not follow paths.
+Once the robot reached the target position, it would stop by setting the power to zero on [zero power brake mode](https://ftctechnh.github.io/ftc_app/doc/javadoc/com/qualcomm/robotcore/hardware/DcMotor.ZeroPowerBehavior.html#BRAKE). We were limited to about 50% power since any faster would make the robot overshoot the target and could make the encoder wheel slip. Movement was basic but multi-directional with our mecanum wheels. Lacked speed, accuracy, and could not follow paths.
 
 ### Field-Centric TeleOp
 
@@ -32,6 +32,8 @@ After we realized we could retrieve the robot's heading from the IMU, it sparked
 
 [Why did we develop our own Path Follower?]()
 
+With acquiring independent dead wheels, we discovered that there was no need to slowly accelerate and decelerate because they would not slip like powered wheels so we did not want to use other libaries.
+
 Used goBILDA pinpoint odometry to move toward a target and then relied on zero power brake mode to stop.
 
 Using separate non-powered wheels to track distance allowed for much more speed because we could apply braking force opposite to the robot's motion and didn't have to worry about if the powered wheels slightly slipped.
@@ -42,6 +44,9 @@ So far, this prototype could only go from point to point; it could not follow pa
 
 This would obviously overshoot the target position instantly because it would only brake after reaching the target position. To fix this, we decided to create a program that drives the robot at different speeds, turns on zero power brake mode, and calculates the distance the robot took to brake. With those data points, we found that it was in the form of `ax^2 + bx` so we used quadratic regression, in that form, to derive a function that accurately predicts the required braking distance at any speed.
 
+![img.png](img.png)
+*Velocity to braking distance data points*
+
 We commonly found our coefficients to be around `a=0.001` and `b=0.07`.
 
 - The `a` term accounts for friction and momentum when braking. This makes it much more accurate at high velocities when friction is more dominant than the wheels' braking force.
@@ -50,9 +55,7 @@ We commonly found our coefficients to be around `a=0.001` and `b=0.07`.
 In this prototype version, it would just turn on zero power brake mode if the distance was greater than the distance remaining to the target point. This worked okay, but it could not correct while it was braking. In next prototype version we would fix this issue by turning it into a simple proportional controller.
 
 ## v3.0 - Corrective Braking Using a Quadratic-Damped PID
-###### Last version used in the 2024-2025 season.
-
-Used in our second competition in January 2025, and was the first time we called it Black-Ice.
+###### Final version used in the 2024–2025 season, first called Black-Ice at our second competition, and also used at our state championship.
 
 In the previous prototype version, it would just turn on zero power brake mode if the braking distance was greater than the distance remaining to the target point. This worked okay, but it could not correct while it was braking. In this prototype version we fixed this issue by turning it into a simple proportional controller that predicts the robot's position by how much displacement it would take to brake.
 
@@ -64,13 +67,20 @@ predictedPositionAfterBraking = current + predictedBrakingDisplacement
 error = target - predictedPositionAfterBraking
 power = error * proportionalConstant
 ```
-We later would realize that this is just a more empirical version of a PID controller with Quadratic-Damping. The `b` is just the Derivative term and the `a` is the quadratic damping.
+We later would realize that this is just a more empirical version of a [PID controller with quadratic-damping](). The `b` is just the Derivative term and the `a` is the quadratic damping.
 
 **Fun Fact:** We originally thought our algorithm was falling apart here because it would be quite a few inches off from the target, so we tried adding Integral terms but eventually we figured out that one of our odometry pods was just defective.
 
-TODO With this we didn't always have to stop at a specific point. We could check if the predicted braking displacement is greater than or equal to the distance remaining, and then we could just proceed to the next waypoint. This ensures it goes to the next waypoint as soon as it needs to so there is no overshoot and before the controller starts to brake.
+### Continuing Momentum At End
+Another benefit was that the robot didn’t always need to stop completely. By checking whether the predicted braking distance was greater than or equal to the distance remaining, we could safely advance to the next target before overshooting. This way, the robot transitions to the next waypoint exactly when needed, avoiding overshoot and preventing the controller from braking unnecessarily.
 
-With later modifications to this version, we also created two distinct braking  predictors for lateral and forward, but after testing, the results were not worth the extra tuning variables to manage. The predicitiveness as well as correctiveness of the controller makes it very accurate and smooth with no overshoot.
+### Separate Forward and Lateral Axis for Mecanum Wheels
+In later versions, we experimented with creating separate braking predictors for the lateral and forward axes of the mecanum wheels. However, testing showed that the added complexity and tuning variables weren’t worth it. It was essentially like having separate PID controllers for each axis, which is unnecessary. The controller’s inherent predictiveness and corrective behavior already provided accurate and adaptable control.
+We did, however, add an extra lateral effort multiplier, which was worthwhile since strafing requires more power than moving forward or backward.
+
+Limitations: could only go from point to point.
+
+# The Pursuit of Following Curves
 
 ## v4.0 - Dynamic Lookahead Follower
 ###### Beginning of 2025 off-season.
@@ -80,13 +90,13 @@ Made follower using a lookahead based off the predicted braking displacement. Fo
 Worked well, however, points were limited to about 1-2 inches apart, or else the robot's reaction time would be slower than the robot's loop time. Looking back at this now, we realized we could have updated our follower and skipped several points in the same loop instead of waiting for the next loop for each point. However, it lacked accuracy and the option of motion profiles for smooth deceleration.
 
 ## v5.0 - Sophisticated Follower
-###### 2025 off-season.
+###### 2025 off-season and beyond.
 
 This is currently the latest version.
-This is a more sophisticated follower that can follow more than just points, including continuous paths such as Bézier curves and lines. It uses centripetal, translational, heading, and drive vectors (prioritized in that order) for smooth and controlled motion. Our drive vector can also follow custom velocity profiles through PIDFs with momentum compensation.
+It is a more sophisticated follower that can follow more than just points, including continuous paths such as Bézier curves and lines. It uses centripetal, translational, heading, and drive vectors (prioritized in that order) for smooth and controlled motion. Our drive vector can also follow custom velocity profiles and slower deceleration through PIDFs with feedforward corrected with momentum compensation.
 
 ### PredictiveBrakingController = Empirical PID controller with Quadratic Damping
-It was at this point that we realized our predictive braking controller was essentially an empirical form of a Proportional-Derivative (PD) controller with added quadratic damping.
+It wasn't until this point that we realized our predictive braking controller was essentially an empirical form of a Proportional-Derivative (PD) controller with added quadratic damping. 
 ```
 outputPower = error - a*velocity*abs(velocity) - b*velocity
 ```
@@ -96,34 +106,8 @@ The term `b * velocity` acts as a derivative component, since the target is cons
 Expanded form:
 ```
 error = target - current
-dTerm = -kD * velocity
-quadraticDamping = -kQ * velocity * |velocity|
-outputPower = error + dTerm + quadraticDamping
+derivative = -kD * velocity
+quadraticDamping = -kQ * velocity * abs(velocity)
+outputPower = error + derivative + quadraticDamping
 ```
-The combined damping terms `dTerm + quadraticDamping` represent the predicted overshoot due to momentum and the robot's braking constraints, and are subtracted from the error to improve control.
-
-Why does the quadratic-damping work so well?
-- triggers internal back EMF
-- 
-We would have never knew to add a quadratic damping term if it were not for the previous iterations. Using Zero Power Braking Mode to set that goal of stopping as fast and as accurate as possible turned into great.
-
-We have been partnering with Pedro Path however to implement some aspects of Black Ice into Pedro Path or even just add a separate fork of pedro path with our follower but will all of the access to the localization and tuning.
-
-Later added motion profiles with target velocities for the drive vector to smoothly slow down before the predictive braking controller
-
-todo back-emf, lower power braking, etc Predictive EMF Braking
-
-Modeled braking displacement with kP/kQuad terms and actively applied reverse power based on back-EMF to both slow and correct position error.
-
-
-// apply constant negative power reverse to the wheel does not give accurate linear deceleration this is due the internal emf braking.
-
-//Made separate braking displacement models for forward vs lateral movement with mecanum wheels. but after testing it works to just use the same model for both axis since it is the equivalent of halfing different PIDs for each axis which is a bit unnecessary and just requires more tuning. There is support for this tho.
-
-Things to note: power reverse of back-EMF
-Modeled braking distance with kP/kQuad terms and actively applied reverse power based on back-EMF to both slow and correct position error.
-
-// FIXME
-Things to note after testing: our model basically simulated the zero power brake mode but with correction. the zero power brake mode uses back-EMF to make the wheels stop spinning and a fact is that if you just reverse the direction of the wheels for example form +1 to -0.001 it will basically behave like zero power brake mode until it gets to lower velocities where -0.001 doesn't do much and where a power like -0.3 would slow down more at lower velocities.
-
-//Predictive back-EMF Braking
+The combined damping terms `derivative + quadraticDamping` represent the predicted overshoot due to momentum and the robot's braking constraints, and are subtracted from the error to improve control. In our code we call `kD`: `kBraking` and `kQ`: `kFriction`
