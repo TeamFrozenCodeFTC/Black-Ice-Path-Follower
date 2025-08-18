@@ -25,24 +25,21 @@ Once the robot reached the target position, it would stop by setting the power t
 
 After we realized we could retrieve the robot's heading from the IMU, it sparked the idea of reversing the heading to transform controller input into field-centric movement. This simple concept became a foundational step in developing vector following, which is essential for path following.
 
-**Fun Fact:** At the time we had no idea that it was even called field-centric teleOp. We used to call it "controller relative TeleOp" because it was relative to the controller's orientation if the controller was relative to the field.
+**Fun Fact:** At the time, we had no idea that it was even called field-centric teleOp. We used to call it "controller relative TeleOp" because it was relative to the controller's orientation if the controller was relative to the field.
 
 ## v2.0 - Odometry Wheels + ZeroPowerBrakeMode Stop Prediction
 ###### Intermediate version between our first and second competitions in 2024.
 
-[Why did we develop our own Path Follower?]()
+[Why did we develop our own Path Follower?](https://github.com/TeamFrozenCodeFTC/Black-Ice-Path-Follower/blob/main/TeamCode/src/main/java/org/firstinspires/ftc/blackice/docs/why-we-developed-our-own.md#why-did-we-develop-our-own-path-follower)
 
-With acquiring independent dead wheels, we discovered that there was no need to slowly accelerate and decelerate because they would not slip like powered wheels so we did not want to use other libaries.
+Used goBILDA pinpoint odometry to move toward a target, dynamically predicted the braking distance, then turned on zero power brake mode to stop.
 
-Used goBILDA pinpoint odometry to move toward a target and then relied on zero power brake mode to stop.
-
-Using separate non-powered wheels to track distance allowed for much more speed because we could apply braking force opposite to the robot's motion and didn't have to worry about if the powered wheels slightly slipped.
+With acquiring independent dead wheels, we discovered that there was no need to slowly accelerate and decelerate because they would not slip like powered wheels. The robot could accelerate fully until the last moment when it needed to brake.
 
 So far, this prototype could only go from point to point; it could not follow paths with lines or curves.
 
 ### Preventing Overshoot
-
-This would obviously overshoot the target position instantly because it would only brake after reaching the target position. To fix this, we decided to create a program that drives the robot at different speeds, turns on zero power brake mode, and calculates the distance the robot took to brake. With those data points, we found that it was in the form of `ax^2 + bx` so we used quadratic regression, in that form, to derive a function that accurately predicts the required braking distance at any speed.
+Initially, the robot overshot because braking occurred only after reaching the target. To fix this, we decided to create a program that measures the robot's braking distance at different speeds using zero power brake mode. With those data points, we found that the velocity to braking distance was in the form of `ax^2 + bx`, so we used quadratic regression (in that form) to derive a function that accurately predicts the required braking distance at any speed.
 
 ![img.png](img.png)
 *Velocity to braking distance data points*
@@ -67,7 +64,7 @@ predictedPositionAfterBraking = current + predictedBrakingDisplacement
 error = target - predictedPositionAfterBraking
 power = error * proportionalConstant
 ```
-We later would realize that this is just a more empirical version of a [PID controller with quadratic-damping](). The `b` is just the Derivative term and the `a` is the quadratic damping.
+We later would realize that this is just a more empirical version of a [PID controller with quadratic damping](https://github.com/TeamFrozenCodeFTC/Black-Ice-Path-Follower/edit/main/TeamCode/src/main/java/org/firstinspires/ftc/blackice/docs/path-follower-evolution.md#predictivebrakingcontroller--empirical-pid-controller-with-quadratic-damping). The `b` is just the derivative term, and the `a` is the quadratic damping.
 
 **Fun Fact:** We originally thought our algorithm was falling apart here because it would be quite a few inches off from the target, so we tried adding Integral terms but eventually we figured out that one of our odometry pods was just defective.
 
@@ -75,7 +72,7 @@ We later would realize that this is just a more empirical version of a [PID cont
 Another benefit was that the robot didn’t always need to stop completely. By checking whether the predicted braking distance was greater than or equal to the distance remaining, we could safely advance to the next target before overshooting. This way, the robot transitions to the next waypoint exactly when needed, avoiding overshoot and preventing the controller from braking unnecessarily.
 
 ### Separate Forward and Lateral Axis for Mecanum Wheels
-In later versions, we experimented with creating separate braking predictors for the lateral and forward axes of the mecanum wheels. However, testing showed that the added complexity and tuning variables weren’t worth it. It was essentially like having separate PID controllers for each axis, which is unnecessary. The controller’s inherent predictiveness and corrective behavior already provided accurate and adaptable control.
+Later on, we experimented with creating separate braking predictors for the lateral and forward axes of the mecanum wheels. However, testing showed that the added complexity and tuning variables weren’t worth it. It was essentially like having separate PID controllers for each axis, which is unnecessary. The controller’s inherent predictiveness and corrective behavior already provided accurate and adaptable control.
 We did, however, add an extra lateral effort multiplier, which was worthwhile since strafing requires more power than moving forward or backward.
 
 Limitations: could only go from point to point.
@@ -85,7 +82,7 @@ Limitations: could only go from point to point.
 ## v4.0 - Dynamic Lookahead Follower
 ###### Beginning of 2025 off-season.
 
-Made follower using a lookahead based off the predicted braking displacement. Followed based of a bunch of points spread along the path.
+Made a follower using a lookahead based on the predicted braking displacement. Followed based on a bunch of points spread along the path.
 
 Worked well, however, points were limited to about 1-2 inches apart, or else the robot's reaction time would be slower than the robot's loop time. Looking back at this now, we realized we could have updated our follower and skipped several points in the same loop instead of waiting for the next loop for each point. However, it lacked accuracy and the option of motion profiles for smooth deceleration.
 
@@ -93,7 +90,9 @@ Worked well, however, points were limited to about 1-2 inches apart, or else the
 ###### 2025 off-season and beyond.
 
 This is currently the latest version.
-It is a more sophisticated follower that can follow more than just points, including continuous paths such as Bézier curves and lines. It uses centripetal, translational, heading, and drive vectors (prioritized in that order) for smooth and controlled motion. Our drive vector can also follow custom velocity profiles and slower deceleration through PIDFs with feedforward corrected with momentum compensation.
+It is a more sophisticated follower that can follow more than just points, including continuous paths such as Bézier curves and lines.
+It uses centripetal, translational, heading, and drive vectors (prioritized in that order) for smooth and controlled motion.
+Our drive vector can also follow custom velocity profiles and slower deceleration through PIDFs with feedforward corrected with momentum compensation.
 
 ### PredictiveBrakingController = Empirical PID controller with Quadratic Damping
 It wasn't until this point that we realized our predictive braking controller was essentially an empirical form of a Proportional-Derivative (PD) controller with added quadratic damping. 
@@ -101,13 +100,13 @@ It wasn't until this point that we realized our predictive braking controller wa
 outputPower = error - a*velocity*abs(velocity) - b*velocity
 ```
 
-The term `b * velocity` acts as a derivative component, since the target is constant and the rate of change of position is `-velocity`.
+The term `b * velocity` acts as a derivative component, since the target is constant and the rate of change of position is `-velocity`. See the proof [here](https://github.com/TeamFrozenCodeFTC/Black-Ice-Path-Follower/blob/main/TeamCode/src/main/java/org/firstinspires/ftc/blackice/docs/quadratic-damping-pid.md#how-does--velocity--derivative-term-in-pid).
 
 Expanded form:
 ```
 error = target - current
-derivative = -kD * velocity
-quadraticDamping = -kQ * velocity * abs(velocity)
+derivative = kD * -velocity
+quadraticDamping = kQ * -velocity * abs(velocity)
 outputPower = error + derivative + quadraticDamping
 ```
-The combined damping terms `derivative + quadraticDamping` represent the predicted overshoot due to momentum and the robot's braking constraints, and are subtracted from the error to improve control. In our code we call `kD`: `kBraking` and `kQ`: `kFriction`
+The combined damping terms `derivative + quadraticDamping` represent the predicted overshoot due to momentum and the robot's braking constraints, and are subtracted from the error to improve control. In our code, we call `kD`: `kBraking` and `kQ`: `kFriction`
