@@ -1,3 +1,7 @@
+---
+nav-order: 2
+---
+
 # Why Did We Develop Our Own Path Follower?
 
 1. We wanted to create a **faster** path follower that could brake as fast as `ZeroPowerBrakeMode` when needed and did not have to always coast to a stop.
