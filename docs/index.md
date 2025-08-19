@@ -2,7 +2,6 @@
 title: "{🧊} Black Ice Path Follower - 5x Faster Deceleration"
 permalink: /
 layout: default
-theme: jekyll-theme-midnight
 ---
 
 # {🧊} Black Ice Path Follower - 5x Faster Deceleration
