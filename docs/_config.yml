@@ -3,8 +3,8 @@ remote_theme: "mmistakes/minimal-mistakes@4.26.2"
 # Make sure the plugin is loaded, otherwise `remote_theme` is "not valid"
 plugins:
   - jekyll-remote-theme
-  - jekyll-feed
-  - jekyll-seo-tag
+  - jekyll-include-cache
+
 
 
 color_scheme: dark   # 👈 forces dark
