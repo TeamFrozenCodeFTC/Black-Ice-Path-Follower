@@ -8,10 +8,10 @@ title: "Black Ice Path Follower"
 
 nav:
   - title: "Overview"
-    url: /
+    url: /overview
     children:
       - title: "Why We Developed Our Own Follower"
-        url: /why-we-developed-our-own
+        url: /overview/why-we-developed-our-own
   - title: "How Much Difference Does Quadratic Damping Make?"
     url: /quadratic-damping-difference
 
