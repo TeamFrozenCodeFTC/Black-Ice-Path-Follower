@@ -2,3 +2,17 @@ remote_theme: just-the-docs/just-the-docs
 
 color_scheme: dark   # 👈 forces dark
 
+nav_order: 1
+has_children: true
+title: "Black Ice Path Follower"
+
+nav:
+  - title: "Overview"
+    url: /overview
+    children:
+      - title: "Why We Developed Our Own Follower"
+        url: /overview/why-we-developed-our-own
+  - title: "How Much Difference Does Quadratic Damping Make?"
+    url: /quadratic-damping-difference
+
+
