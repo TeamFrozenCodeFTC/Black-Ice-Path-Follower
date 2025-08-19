@@ -1,7 +1,6 @@
 ---
 title: "{🧊} Black Ice Path Follower - 5x Faster Deceleration"
-permalink: /
-layout: default
+nav-order: 1
 ---
 
 # {🧊} Black Ice Path Follower - 5x Faster Deceleration
