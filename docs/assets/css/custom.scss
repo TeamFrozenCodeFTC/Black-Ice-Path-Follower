@@ -1,0 +1,20 @@
+.page-toc {
+  float: right;
+  width: 250px;
+  margin-left: 2rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: var(--body-background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.9em;
+}
+
+.page-toc ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.page-toc a {
+  text-decoration: none;
+}
