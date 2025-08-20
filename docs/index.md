@@ -7,7 +7,7 @@ nav_order: 1
 <!-- <div style="display:flex; align-items:flex-start; gap:2rem;">
 
   <!-- LEFT COLUMN: all your content -->
-  <div style="flex:1; min-width:0;"> -->
+  <!-- <div style="flex:1; min-width:0;"> --> 
 
 
 # {🧊} Black Ice Path Follower - 5x Faster Deceleration
