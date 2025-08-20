@@ -11,7 +11,20 @@ nav_order: 1
 ## Table of Contents
 {: .no_toc .text-delta }
 
-<div style="float:right; width:250px; margin-left:2rem; padding:1rem; border:1px solid #ccc; border-radius:8px; max-height:80vh; overflow:auto; position:sticky; top:5rem; background:#f8f8f8;">
+<div style="
+  float:right;
+  width:250px;
+  margin-left:2rem;
+  padding:1rem;
+  border:1px solid #ccc;
+  border-radius:8px;
+  max-height:80vh;
+  overflow:auto;
+  position:sticky;
+  top:5rem;
+  background:#f8f8f8;
+  color:#333;            /* <-- text color */
+">
 {:toc}
 </div>
 
