@@ -11,8 +11,10 @@ nav_order: 1
 ## Table of Contents
 {: .no_toc .text-delta }
 
+<div class="page-toc">
 1. TOC
 {:toc}
+</div>
 
 Black Ice (by FTC Team #18535, Frozen Code) is a **reactive + predictive path follower** that adapts in real-time along paths.
 
