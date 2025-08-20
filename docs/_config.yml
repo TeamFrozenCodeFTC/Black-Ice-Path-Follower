@@ -8,3 +8,9 @@ title: "Black Ice Path Follower"
 
 kramdown:
   parse_block_html: true
+
+defaults:
+  - scope:
+      path: ""   # all files
+    values:
+      layout: "default"
