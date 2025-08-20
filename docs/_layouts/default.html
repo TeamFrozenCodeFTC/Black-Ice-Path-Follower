@@ -1,41 +1,35 @@
 ---
-layout: none
+layout: default
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>{{ page.title }}</title>
-    {{ site.head }}
-    <link rel="stylesheet" href="{{ "/assets/css/style.css" | relative_url }}">
-  </head>
-  <body>
-    <div style="display:flex; align-items:flex-start; gap:2rem; max-width:1600px; margin:0 auto;">
+<div style="display:flex; align-items:flex-start; gap:2rem; max-width:1600px; margin:0 auto;">
 
-      <!-- LEFT COLUMN: content -->
-      <main style="flex:1; min-width:0;">
-        {{ content }}
-      </main>
+  <!-- Main content -->
+  <main style="flex:1; min-width:0;">
+    {{ content }}
+  </main>
 
-      <!-- RIGHT COLUMN: sticky TOC -->
-      <aside style="
-        width:280px;
-        position:sticky;
-        top:4rem;
-        max-height:80vh;
-        overflow:auto;
-        padding:1rem;
-        border:1px solid #444;
-        border-radius:8px;
-        background:#1f1f1f;
-        color:#f8f8f8;
-        flex-shrink:0;
-      ">
-        <h3>On this page</h3>
-        * TOC
-        {:toc}
-      </aside>
-    </div>
-  </body>
-</html>
+  <!-- TOC column -->
+  <aside style="
+    width:280px;
+    position:sticky;
+    top:4rem;
+    max-height:80vh;
+    overflow:auto;
+    padding:1rem;
+    border:1px solid #444;
+    border-radius:8px;
+    background:#1f1f1f;
+    color:#f8f8f8;
+    flex-shrink:0;
+  ">
+    <h3>On this page</h3>
+
+    <!-- IMPORTANT: this is Markdown context -->
+    {% capture mytoc %}
+    * TOC
+    {:toc}
+    {% endcapture %}
+    {{ mytoc | markdownify }}
+  </aside>
+</div>
