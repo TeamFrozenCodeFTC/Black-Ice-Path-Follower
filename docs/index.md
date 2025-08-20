@@ -4,6 +4,12 @@ description: "What is Black Ice?"
 nav_order: 1
 ---
 
+<div style="display:flex; align-items:flex-start; gap:2rem;">
+
+  <!-- LEFT COLUMN: all your content -->
+  <div style="flex:1; min-width:0;">
+
+
 # {🧊} Black Ice Path Follower - 5x Faster Deceleration
 
 {: .no_toc }
@@ -11,8 +17,6 @@ nav_order: 1
 ## Table of Contents
 {: .no_toc .text-delta }
 
-1. TOC
-{:toc}
 
 Black Ice (by FTC Team #18535, Frozen Code) is a **reactive + predictive path follower** that adapts in real-time along paths.
 
@@ -168,3 +172,24 @@ We have also given back to Pedro Path, our contributions to Pedro Path so far fo
 
 We are on the lead of deceleration for upcoming v1.2.0 Pedro Path and we plan to implement our quadratic-damped PIDs for the translational vector.
 In the mean time, we will create a separate fork of Pedro Path with our the Black Ice follower but with all of the access to Pedro's localization and tuning.
+
+
+</div>
+
+<div style="
+    width:250px;
+    position:sticky;
+    top:4rem;
+    max-height:80vh;
+    overflow:auto;
+    padding:1rem;
+    border:1px solid #444;
+    border-radius:8px;
+    background:#1f1f1f;
+    color:#f8f8f8;
+    flex-shrink:0;
+  ">
+1. TOC
+{:toc}
+</div>
+</div>
