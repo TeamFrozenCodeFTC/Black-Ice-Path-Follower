@@ -6,6 +6,11 @@ nav_order: 1
 
 # {🧊} Black Ice Path Follower - 5x Faster Deceleration
 
+{: .no_toc }
+
+## Table of Contents
+{: .no_toc .text-delta }
+
 1. TOC
 {:toc}
 
