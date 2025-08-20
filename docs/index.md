@@ -6,6 +6,9 @@ nav_order: 1
 
 # {🧊} Black Ice Path Follower - 5x Faster Deceleration
 
+1. TOC
+{:toc}
+
 Black Ice (by FTC Team #18535, Frozen Code) is a **reactive + predictive path follower** that adapts in real-time along paths.
 
 It drives at **high speeds** and then brakes up to **5× faster** than other libraries.
