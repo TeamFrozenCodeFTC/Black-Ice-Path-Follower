@@ -1,11 +1,4 @@
-remote_theme: "mmistakes/minimal-mistakes@4.26.2"
-
-# Make sure the plugin is loaded, otherwise `remote_theme` is "not valid"
-plugins:
-  - jekyll-remote-theme
-  - jekyll-include-cache
-
-
+remote_theme: just-the-docs/just-the-docs
 
 color_scheme: dark   # 👈 forces dark
 
@@ -13,15 +6,3 @@ nav_order: 1
 has_children: true
 title: "Black Ice Path Follower"
 
-minimal_mistakes_skin: "dark"
-
-# Set default layout to have sidebar nav
-defaults:
-  - scope:
-      path: ""
-      type: pages
-    values:
-      layout: single
-      author_profile: false
-      sidebar:
-        nav: "main"   # <-- matches the _data/navigation.yml key
