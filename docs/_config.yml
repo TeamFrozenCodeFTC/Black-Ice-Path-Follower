@@ -1,7 +1,10 @@
 remote_theme: just-the-docs/just-the-docs
 
-color_scheme: dark   # 👈 forces dark
+color_scheme: dark
 
 nav_order: 1
 has_children: true
 title: "Black Ice Path Follower"
+
+kramdown:
+  parse_block_html: true
