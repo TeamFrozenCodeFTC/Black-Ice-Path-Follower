@@ -1,0 +1,8 @@
+main:
+  - title: "Overview"
+    url: /overview
+    children:
+      - title: "Why We Developed Our Own Follower"
+        url: /overview/why-we-developed-our-own
+  - title: "How Much Difference Does Quadratic Damping Make?"
+    url: /quadratic-damping-difference
