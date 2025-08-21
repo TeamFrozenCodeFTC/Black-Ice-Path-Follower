@@ -2,7 +2,7 @@
 layout: default
 ---
 
-<div style="display:flex; align-items:flex-start; gap:2rem; max-width: 1200px !important; width: 100% !important;">
+<div style="display:flex; align-items:flex-start; gap:2rem;">
     <div style="flex:1; min-width:0;"> 
         {{ content }}
     </div>
@@ -23,3 +23,8 @@ layout: default
         {% include toc.html html=content sanitize=true class="inline_toc" id="my_toc" ordered=true %}
     </div>
 </div>
+<style>
+    .site-content {
+      max-width: 1800px; /* Adjust this value as needed */
+    }
+</style>
