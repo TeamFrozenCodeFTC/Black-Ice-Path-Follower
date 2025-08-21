@@ -46,44 +46,22 @@ layout: default
   </div>
 </div> -->
 
-
-<style>
-/* Make the main content wider */
-.docs-container {
-  display: flex;
-  align-items: flex-start;
-  gap: 2rem;
-}
-
-.docs-main {
-  flex: 1;
-  min-width: 0; /* allow proper shrinking */
-  max-width: none; /* remove Just the Docs default limit */
-}
-
-/* Optional: style your sidebar */
-#page-toc {
-  width: 250px;
-  position: sticky;
-  top: 4rem;
-  max-height: 80vh;
-  overflow: auto;
-  padding: 1rem;
-  border: 1px solid #444;
-  border-radius: 8px;
-  background: #1f1f1f;
-  color: #f8f8f8;
-  flex-shrink: 0;
-}
-</style>
-
-<div class="docs-container">
-  <main class="docs-main">
-    {{ content }}
-  </main>
-
-  <aside id="page-toc">
-    <h3>On This Page</h3>
-    {% include toc.html html=content sanitize=true class="inline_toc" id="my_toc" ordered=true %}
-  </aside>
+{{ content }}
+<!-- TOC sidebar, separate from content -->
+<div id="page-toc" style="
+    position: sticky;
+    top: 4rem;
+    width: 250px;
+    max-height: 80vh;
+    overflow: auto;
+    padding: 1rem;
+    border: 1px solid #444;
+    border-radius: 8px;
+    background: #1f1f1f;
+    color: #f8f8f8;
+    right: 2rem;
+    float: right; /* or use fixed/absolute depending on effect */
+">
+  <h3>On This Page</h3>
+  {% include toc.html html=content sanitize=true class="inline_toc" id="my_toc" ordered=true %}
 </div>
