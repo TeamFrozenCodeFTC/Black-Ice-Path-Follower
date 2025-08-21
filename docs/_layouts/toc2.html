@@ -2,7 +2,7 @@
 layout: default
 ---
 
-<div style="display:flex; align-items:flex-start; gap:2rem;">
+<!-- <div style="display:flex; align-items:flex-start; gap:2rem;">
     <div style="flex:1; min-width:0;"> 
         {{ content }}
     </div>
@@ -20,6 +20,24 @@ layout: default
         color:#f8f8f8;
         flex-shrink:0;">
         {% include toc.html html=content sanitize=true class="inline_toc" id="my_toc" ordered=true %}
-        false
     </div>
+</div> -->
+
+<div style="flex:1; min-width:0; position:relative;">
+  {{ content }}
+
+  <div style="
+      width:250px;
+      position:fixed;
+      right:2rem;       /* stick it to the right edge */
+      top:4rem;
+      max-height:80vh;
+      overflow:auto;
+      padding:1rem;
+      border:1px solid #444;
+      border-radius:8px;
+      background:#1f1f1f;
+      color:#f8f8f8;">
+      {% include toc.html html=content sanitize=true class="inline_toc" id="my_toc" ordered=true %}
+  </div>
 </div>
