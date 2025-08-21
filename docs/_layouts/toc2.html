@@ -106,7 +106,19 @@ layout: default
     {{ content }}
   </main>
 
-  <aside id="toc-sidebar" class="toc-box">
+  <aside style="
+      width:250px;
+      position:sticky;
+      top:4rem;
+      max-height:80vh;
+      overflow:auto;
+      padding:1rem;
+      border:1px solid #444;
+      border-radius:8px;
+      background:#1f1f1f;
+      color:#f8f8f8;
+      flex-shrink:0;">
+      <h3>On This Page</h3>
     {% include toc.html html=content sanitize=true class="inline_toc" id="my_toc" ordered=true %}
   </aside>
 </div>
@@ -120,6 +132,7 @@ layout: default
   display: grid;
   grid-template-columns: 1fr 250px; /* text takes leftover, TOC is 250px */
   gap: 2rem;
+  max-width: 1200px;
 }
 
 /* Text area */
