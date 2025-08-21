@@ -46,19 +46,18 @@ layout: default
   </div>
 </div> -->
 
-<div style="display:flex; align-items:flex-start; gap:2rem; max-width:100%;">
-  <!-- Content -->
-  <div style="
-      flex-grow:1; 
-      flex-shrink:0; 
-      min-width:0; 
-      max-width: calc(100% - 270px); /* reserve space for TOC */
-      overflow-wrap: break-word; /* wrap long words */
-      word-break: break-word;">
-      {{ content }}
+
+<style>
+  .docs-content {
+    max-width: 2000px; /* remove the default limit */
+  }
+</style>
+
+<div style="display:flex; align-items:flex-start; gap:2rem;">
+  <div style="flex:1; min-width:0;">
+    {{ content }}
   </div>
 
-  <!-- TOC -->
   <div style="
       width:250px;
       position:sticky;
