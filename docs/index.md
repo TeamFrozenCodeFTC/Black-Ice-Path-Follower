@@ -16,8 +16,21 @@ nav_order: 1
 ## Table of Contents
 {: .no_toc .text-delta }
 
-1. TOC
-{:toc}
+<div style="
+    width:250px;
+    position:sticky;
+    top:4rem;
+    max-height:80vh;
+    overflow:auto;
+    padding:1rem;
+    border:1px solid #444;
+    border-radius:8px;
+    background:#1f1f1f;
+    color:#f8f8f8;
+    flex-shrink:0;">
+    1. TOC
+    {:toc}
+</div>
 
 
 Black Ice (by FTC Team #18535, Frozen Code) is a **reactive + predictive path follower** that adapts in real-time along paths.
