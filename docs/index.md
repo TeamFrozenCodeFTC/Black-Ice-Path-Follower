@@ -3,6 +3,7 @@ layout: toc
 title: "Overview"
 description: "What is Black Ice?"
 nav_order: 1
+has_toc: true
 ---
 
 <!-- <div style="display:flex; align-items:flex-start; gap:2rem;">
@@ -16,7 +17,7 @@ nav_order: 1
 ## Table of Contents
 {: .no_toc .text-delta }
 
-<div style="
+<!-- <div style="
     width:250px;
     position:sticky;
     top:4rem;
@@ -30,7 +31,7 @@ nav_order: 1
     flex-shrink:0;">
     1. TOC
     {:toc}
-</div>
+</div> -->
 
 
 Black Ice (by FTC Team #18535, Frozen Code) is a **reactive + predictive path follower** that adapts in real-time along paths.
