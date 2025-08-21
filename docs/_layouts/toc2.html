@@ -19,15 +19,7 @@ layout: default
         background:#1f1f1f;
         color:#f8f8f8;
         flex-shrink:0;">
-        {% if page.has_children == true and page.has_toc != false %}
-            {% include components/children_nav.html %}
-            true
-        {% endif %}
-        {% include vendor/anchor_headings.html
-            html=content
-            beforeHeading="true"
-            anchorBody="<svg viewBox='0 0 16 16' aria-hidden='true'><use xlink:href='#link'></use></svg>"
-        %}
+        {% include toc.html html=content h_min=2 h_max=4 class="toc-list" id="page-toc" %}
         false
     </div>
 </div>
