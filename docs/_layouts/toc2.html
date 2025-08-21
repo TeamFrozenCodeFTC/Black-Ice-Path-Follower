@@ -2,7 +2,7 @@
 layout: default
 ---
 
-<!-- <div style="display:flex; align-items:flex-start; gap:2rem;">
+<div style="display:flex; align-items:flex-start; gap:2rem; max-width: 1200px !important; width: 100%;">
     <div style="flex:1; min-width:0;"> 
         {{ content }}
     </div>
@@ -19,126 +19,7 @@ layout: default
         background:#1f1f1f;
         color:#f8f8f8;
         flex-shrink:0;">
+        <h3>On This Page</h3>
         {% include toc.html html=content sanitize=true class="inline_toc" id="my_toc" ordered=true %}
     </div>
-</div> -->
-<!-- 
-<div style="display:flex; align-items:flex-start; gap:2rem;">
-  <div style="flex:1; min-width:0;">
-    {{ content }}
-  </div>
-
-  <aside style="
-      width:250px;
-      position:sticky;
-      top:4rem;
-      max-height:80vh;
-      overflow:auto;
-      padding:1rem;
-      border:1px solid #444;
-      border-radius:8px;
-      background:#1f1f1f;
-      color:#f8f8f8;
-      flex-shrink:0;">
-    {% include toc.html html=content sanitize=true class="inline_toc" id="my_toc" ordered=true %}
-  </aside>
-</div> -->
-<!-- 
-
-
-
-
-<!-- Toggle Button (only on small screens)
-<button id="toc-toggle" style="
-    position:fixed;
-    bottom:1rem;
-    right:1rem;
-    padding:0.5rem 1rem;
-    border:none;
-    border-radius:6px;
-    background:#444;
-    color:white;
-    font-size:14px;
-    cursor:pointer;
-    display:none;">
-  TOC
-</button>
-
-<style>
-/* Default: sidebar visible */
-#toc-sidebar { display:block; }
-
-/* Small screens: hide sidebar, show button */
-@media (max-width: 1000px) {
-  #toc-sidebar {
-    display:none;
-    position:fixed;
-    top:0;
-    right:0;
-    height:100vh;
-    width:250px;
-    max-height:none;
-    border-radius:0;
-    z-index:999;
-  }
-  #toc-toggle {
-    display:block;
-  }
-}
-</style>
-
-<script>
-  const tocSidebar = document.getElementById("toc-sidebar");
-  const tocToggle = document.getElementById("toc-toggle");
-
-  tocToggle.addEventListener("click", () => {
-    if (tocSidebar.style.display === "block") {
-      tocSidebar.style.display = "none";
-    } else {
-      tocSidebar.style.display = "block";
-    }
-  });
-</script> -->
-
-
-<div class="page-grid">
-  <main class="page-content">
-    {{ content }}
-  </main>
-
-  <aside style="
-      width:250px;
-      position:sticky;
-      top:4rem;
-      max-height:80vh;
-      overflow:auto;
-      padding:1rem;
-      border:1px solid #444;
-      border-radius:8px;
-      background:#1f1f1f;
-      color:#f8f8f8;
-      flex-shrink:0;">
-      <h3>On This Page</h3>
-    {% include toc.html html=content sanitize=true class="inline_toc" id="my_toc" ordered=true %}
-  </aside>
 </div>
-
-<!-- Toggle Button (for small screens) -->
-<button id="toc-toggle">TOC</button>
-
-<style>
-/* Grid for text + TOC */
-.page-grid {
-  display: grid;
-  grid-template-columns: 1fr 250px; /* text takes leftover, TOC is 250px */
-  gap: 2rem;
-  max-width: 1200px;
-}
-
-/* Text area */
-.page-content {
-  min-width: 0; /* prevents overflow */
-  max-width: 1200px !important;
-}
-
-</style>
