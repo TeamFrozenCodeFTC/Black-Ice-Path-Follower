@@ -24,8 +24,13 @@ layout: default
     </div>
 </div>
 <style>
-    .main-content {
-        max-width: 2000px;
+    .main {
+        margin: auto;
+
+        @include mq(md) {
+            position: relative;
+            max-width: 2000px;
+        }
     }
 </style>
 
