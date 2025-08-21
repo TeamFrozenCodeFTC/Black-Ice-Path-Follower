@@ -23,7 +23,11 @@ layout: default
             {% include components/children_nav.html %}
             true
         {% endif %}
-        {% include vendor/anchor_headings.html html=content ... %}
+        {% include vendor/anchor_headings.html
+            html=content
+            beforeHeading="true"
+            anchorBody="<svg viewBox='0 0 16 16' aria-hidden='true'><use xlink:href='#link'></use></svg>"
+        %}
         false
     </div>
 </div>
