@@ -24,9 +24,9 @@ layout: default
     </div>
 </div> -->
 
-<div style="display:flex; align-items:flex-start; gap:2rem;">
-  <div style="flex-grow:1; flex-shrink:0; min-width:0;"> 
-      {{ content }}
+<div style="position:relative;">
+  <div style="margin-right:270px;"> <!-- content gets space for TOC -->
+    {{ content }}
   </div>
   <div style="
       width:250px;
@@ -39,7 +39,8 @@ layout: default
       border-radius:8px;
       background:#1f1f1f;
       color:#f8f8f8;
-      flex-shrink:0;">
+      position:absolute;
+      right:0;">
       <h3>On This Page</h3>
       {% include toc.html html=content sanitize=true class="inline_toc" id="my_toc" ordered=true %}
   </div>
