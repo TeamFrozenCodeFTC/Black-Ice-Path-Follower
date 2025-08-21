@@ -122,3 +122,23 @@ layout: default
     {% include toc.html html=content sanitize=true class="inline_toc" id="my_toc" ordered=true %}
   </aside>
 </div>
+
+<!-- Toggle Button (for small screens) -->
+<button id="toc-toggle">TOC</button>
+
+<style>
+/* Grid for text + TOC */
+.page-grid {
+  display: grid;
+  grid-template-columns: 1fr 250px; /* text takes leftover, TOC is 250px */
+  gap: 2rem;
+  max-width: 1200px;
+}
+
+/* Text area */
+.page-content {
+  min-width: 0; /* prevents overflow */
+  max-width: 1200px !important;
+}
+
+</style>
