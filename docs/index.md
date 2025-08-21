@@ -4,6 +4,7 @@ title: "Overview"
 description: "What is Black Ice?"
 nav_order: 1
 has_toc: true
+has_children: true
 ---
 
 <!-- <div style="display:flex; align-items:flex-start; gap:2rem;">
@@ -11,8 +12,6 @@ has_toc: true
 
 
 # {🧊} Black Ice Path Follower - 5x Faster Deceleration
-
-{: .no_toc }
 
 ## Table of Contents
 {: .no_toc .text-delta }
