@@ -5,10 +5,8 @@ description: "What is Black Ice?"
 nav_order: 1
 ---
 
-
-<!-- # {🧊} Black Ice Path Follower - 5x Faster Deceleration
-
-{: .no_toc } -->
+# {🧊} Black Ice Path Follower - 5x Faster Deceleration
+{: .no_toc }
 
 
 Black Ice (by FTC Team #18535, Frozen Code) is a **reactive + predictive path follower** that adapts in real-time along paths.
@@ -51,6 +49,7 @@ With quadratic damping + back-EMF braking:
 
 
 # Example Usages
+{: .no_toc }
 
 ## LinearOpMode Example
 
