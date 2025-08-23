@@ -36,40 +36,7 @@ layout: default
         {{ content }}
     </div>
 </div>
-<!-- <script>
-document.addEventListener("DOMContentLoaded", function() {
-  const toc = document.querySelector(".toc");
-  const firstHeader = document.querySelector("h1");
-  const originalParent = toc?.parentNode;
-  const originalNextSibling = toc?.nextSibling;
 
-  function moveTOC() {
-    if (!toc || !firstHeader) return;
-
-    if (window.innerWidth <= 800) {
-      // Move TOC after first header
-      if (firstHeader.nextElementSibling !== toc) {
-        firstHeader.insertAdjacentElement("afterend", toc);
-      }
-    } else {
-      // Put TOC back in original place
-      if (originalParent && toc.parentNode !== originalParent) {
-        if (originalNextSibling) {
-          originalParent.insertBefore(toc, originalNextSibling);
-        } else {
-          originalParent.appendChild(toc);
-        }
-      }
-    }
-  }
-
-  // Run on load
-  moveTOC();
-
-  // Run on resize
-  window.addEventListener("resize", moveTOC);
-});
-</script> -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
   const toc = document.querySelector(".toc");
@@ -125,6 +92,7 @@ document.addEventListener("DOMContentLoaded", function() {
     background: #1f1f1f;
     color: #f8f8f8;
     flex-shrink: 0;
+    font-size: small;
   }
   .a {
     display:flex; align-items:flex-start; gap:2rem;
