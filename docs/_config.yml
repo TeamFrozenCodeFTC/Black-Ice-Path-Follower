@@ -9,3 +9,6 @@ title: "Black Ice Path Follower"
 kramdown:
   parse_block_html: true
 
+aux_links:
+  "GitHub":
+    - "https://github.dev/TeamFrozenCodeFTC/Black-Ice-Path-Follower"
