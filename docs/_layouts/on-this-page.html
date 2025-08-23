@@ -36,7 +36,7 @@ layout: default
         {{ content }}
     </div>
 </div>
-<script>
+<!-- <script>
 document.addEventListener("DOMContentLoaded", function() {
   const toc = document.querySelector(".toc");
   const firstHeader = document.querySelector("h1");
@@ -68,6 +68,45 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Run on resize
   window.addEventListener("resize", moveTOC);
+});
+</script> -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const toc = document.querySelector(".toc");
+  // Only grab the first h1 inside the main content div
+  const firstHeader = document.querySelector(".content h1");
+  const originalParent = toc?.parentNode;
+  const originalNextSibling = toc?.nextSibling;
+
+  function moveTOC() {
+    if (!toc || !firstHeader) return;
+
+    if (window.innerWidth <= 800) {
+      // Only move if it's not already after the header
+      if (firstHeader.nextElementSibling !== toc) {
+        firstHeader.insertAdjacentElement("afterend", toc);
+      }
+    } else {
+      // Put back in the original sidebar location
+      if (originalParent && toc.parentNode !== originalParent) {
+        if (originalNextSibling) {
+          originalParent.insertBefore(toc, originalNextSibling);
+        } else {
+          originalParent.appendChild(toc);
+        }
+      }
+    }
+  }
+
+  // Run once on load
+  moveTOC();
+
+  // Throttle resize so it doesn't jump around too much
+  let resizeTimer;
+  window.addEventListener("resize", function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(moveTOC, 150);
+  });
 });
 </script>
 
