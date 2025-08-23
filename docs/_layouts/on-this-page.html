@@ -2,7 +2,7 @@
 layout: default
 ---
 
-<div style="display:flex; align-items:flex-start; gap:2rem;">
+<!-- <div style="display:flex; align-items:flex-start; gap:2rem;">
     
     <div style="
         order: 2;
@@ -25,47 +25,37 @@ layout: default
         {{ content }}
     </div>
 
-</div>
-<!-- 
-<div style="display:flex; gap:1rem; flex-wrap:wrap;">
-  <div style="
-        width:15rem;
-        position:sticky;
-        top:4rem;
-        max-height:80vh;
-        overflow:auto;
-        padding:1rem;
-        border:1px solid #444;
-        border-radius:16px;
-        background:#1f1f1f;
-        color:#f8f8f8;
-        flex-shrink:0;">
+</div> -->
+<div style="display:flex; align-items:flex-start; gap:2rem;">
+    
+    <div>
         <div style="font-size: larger;">On This Page</div>
         {% include toc.html html=content sanitize=true class="inline_toc" id="my_toc" h_min=2 %}
     </div>
 
-  <div style="flex:1; min-width:0;">
-    {{ content }}
-  </div>
-</div> -->
+    <div style="flex:1; min-width:0; order: 1;"> 
+        {{ content }}
+    </div>
+
+</div>
+
 
 <style>
-
-@media (max-width: 800px) {
+@media (min-width: 801px) {
   .toc {
-        width: inherit;
-        position: inherit;
-        top: inherit;
-        max-height:inherit;
-        overflow:inherit;
-        padding:inherit;
-        border:inherit;
-        border-radius:inherit;
-        background:inherit;
-        color:inherit;
-        flex-shrink:inherit"
-  }
-}
+    order: 2;
+    width: 15rem;
+    position: sticky;
+    top: 4rem;
+    max-height: 80vh;
+    overflow: auto;
+    padding: 1rem;
+    border: 1px solid #444;
+    border-radius: 16px;
+    background: #1f1f1f;
+    color: #f8f8f8;
+    flex-shrink: 0;
+  }}
 .main {
     max-width: 65rem;
 }
