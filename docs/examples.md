@@ -1,5 +1,5 @@
 ---
-layout: toc2
+layout: on-this-page
 title: "Examples"
 nav_order: 2
 ---

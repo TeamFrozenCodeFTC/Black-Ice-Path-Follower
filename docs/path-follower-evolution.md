@@ -1,3 +1,9 @@
+---
+layout: on-this-page
+title: "History of Iterations"
+nav_order: 4
+---
+
 <h1>
   The History and Evolution<br>
   <sub>of Our Path Follower, Black Ice</sub>
