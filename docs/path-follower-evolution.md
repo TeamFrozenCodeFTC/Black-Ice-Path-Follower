@@ -4,10 +4,7 @@ title: "History of Iterations"
 nav_order: 4
 ---
 
-<h1>
-  The History and Evolution<br>
-  <sub>of Our Path Follower, Black Ice</sub>
-</h1>
+# The History and Evolution<br><sub>of Our Path Follower, Black Ice</sub>
 
 ### Prototype Versions
 
@@ -21,7 +18,8 @@ nav_order: 4
 The beginnings of Black Ice started in our first season, INTO THE DEEP 2024-2025, with the development of our first autonomous frameworks. Our small framework was later was fully developed into a sophisticated follower in the 2025 off-season.
 
 ## v1.0 - Wheel Encoder + IMU
-###### Used in our first _ever_ competition in December, 2024.</span>
+###### Used in our first _ever_ competition in December, 2024.
+{: .no_toc}
 
 In auto, it combined a single wheel encoder to estimate linear displacement with an IMU for heading lock. In tele-op, it used the internal IMU to transform a target, field-relative vector into a robot-relative vector.
 
@@ -35,6 +33,7 @@ After we realized we could retrieve the robot's heading from the IMU, it sparked
 
 ## v2.0 - Odometry Wheels + ZeroPowerBrakeMode Stop Prediction
 ###### Intermediate version between our first and second competitions in 2024.
+{: .no_toc}
 
 [Why did we develop our own Path Follower?](https://github.com/TeamFrozenCodeFTC/Black-Ice-Path-Follower/blob/main/TeamCode/src/main/java/org/firstinspires/ftc/blackice/docs/why-we-developed-our-own.md#why-did-we-develop-our-own-path-follower)
 
@@ -61,6 +60,7 @@ In this prototype version, it would just turn on zero power brake mode if the di
 
 ## v3.0 - Corrective Braking Using a Quadratic-Damped PID
 ###### Final version used in the 2024–2025 season, first called Black-Ice at our second competition, and also used at our state championship.
+{: .no_toc}
 
 In the previous prototype version, it would just turn on zero power brake mode if the braking distance was greater than the distance remaining to the target point. This worked okay, but it could not correct while it was braking. In this prototype version we fixed this issue by turning it into a simple proportional controller that predicts the robot's position by how much displacement it would take to brake.
 
@@ -89,6 +89,7 @@ Limitations: could only go from point to point.
 
 ## v4.0 - Dynamic Lookahead Follower
 ###### Beginning of 2025 off-season.
+{: .no_toc}
 
 Made a follower using a lookahead based on the predicted braking displacement. Followed based on a bunch of points spread along the path.
 
@@ -96,6 +97,7 @@ Worked well, however, points were limited to about 1-2 inches apart, or else the
 
 ## v5.0 - Sophisticated Follower
 ###### 2025 off-season and beyond.
+{: .no_toc}
 
 This is currently the latest version.
 It is a more sophisticated follower that can follow more than just points, including continuous paths such as Bézier curves and lines.

@@ -27,16 +27,25 @@ When you reverse the motor power, the motor’s internal back-EMF also reverses.
 In an ideal scenario, the braking force would be directly proportional to velocity. However, when the robot’s powered wheels are braking to a stop, the deceleration is not perfectly linear. The friction involved in braking causes the relationship between velocity and braking distance to become **non-linear**. This is why we call `kD`: `kBrake` and `kQ`: `kFriction` in our code.
 
 ## How much difference does the Quadratic Damping make?
-Other libraries, such as Pedro Path and Roadrunner, rely on less aggressive, slower PID controllers that rely more on coasting to the target position. This is a more predictable constant deceleration of around `-40in/s` or `45in` of distance to stop while going `60 in/s`. However, if you use a more aggressive PID controller with quadratic-damping that makes use of back-EMF, you can get much faster deceleration of around `10 in` of distance to stop while going `60in/s`. This is nearly **5 times faster deceleration**, plus the extra time you have to accelerate instead of braking.
+Other libraries (e.g. Roadrunner, Pedro Path) rely on gentle PID + coasting:
+
+- Coasting (~`-40 in/s²`) needs **~`45in`** to stop from `60 in/s`
+
+With quadratic damping + back-EMF braking:
+
+- **~`10 in`** to stop from `60 in/s` → nearly **5× faster deceleration**
+- Leaves more time to accelerate before braking
 
 ### Pros
-- **Faster** – spends less time decelerating, more time accelerating
-- **More Accurate** – higher proportional constant reduces steady-state error
-- **More Responsive** – reacts quickly without oscillation due to quadratic damping
-### Trade-offs
-- **Higher Power Usage** – requires more voltage, applying reverse power to brake faster
-- **Less Smooth Stops** – quick braking can cause slight shaking when first coming to a stop
+{: .no_toc }
+- **Faster** - more time accelerating, less time decelerating
+- **More accurate** - higher proportional constant reduces steady-state error
+- **More responsive** - reacts quickly without oscillation due to quadratic damping
 
+### Trade-offs
+{: .no_toc }
+- **Higher power usage** - requires more voltage, applying reverse power to brake faster
+- **Sharper stops** - can feel less smooth (minor shaking at final stop)
 
 # How does -velocity = Derivative term in PID?
 Let the positional error be:  
