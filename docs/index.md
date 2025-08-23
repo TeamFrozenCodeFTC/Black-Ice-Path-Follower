@@ -45,7 +45,7 @@ With quadratic damping + back-EMF braking:
 - **Java + Android Studio**
 
 
-# Why Did We Develop Our Own Path Follower?
+## Why Did We Develop Our Own Path Follower?
 
 1. We wanted to create a **faster** path follower that could brake as fast as `ZeroPowerBrakeMode` when needed and did not have to always coast to a stop.
    - This was because our goal for the 2024–2025 season was a five-specimen autonomous using only 312 RPM wheels and after scoring each specimen, the robot had to turn around. 
@@ -55,7 +55,7 @@ With quadratic damping + back-EMF braking:
 
 It was worth creating our own path follower because it led us to add a quadratic-damping term to our translational PID. This made the system nearly five times faster at decelerating. We never would have discovered this approach without building our own follower with all the eariler prototype and iterations. Setting the goal of stopping as quickly and accurately as possible, using Zero Power Brake Mode as inspiration, pushed us to that breakthrough.
 
-# Credits
+## Credits
 
 All code developed by **Jacob Ophoven** with help of **Coach Andy** and members of the FTC community.
 Thanks to Pedro Path developers, especially **Havish from 12808 RevAmped Robotics**, for supporting my project and wanting to implement it into Pedro Path (an advanced path follower used by teams at worlds).
