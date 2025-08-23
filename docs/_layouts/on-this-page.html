@@ -26,9 +26,8 @@ layout: default
     </div>
 
 </div> -->
-<div style="display:flex; align-items:flex-start; gap:2rem;">
-    
-    <div>
+<div class="a">
+    <div class="toc">
         <div style="font-size: larger;">On This Page</div>
         {% include toc.html html=content sanitize=true class="inline_toc" id="my_toc" h_min=2 %}
     </div>
@@ -36,7 +35,6 @@ layout: default
     <div style="flex:1; min-width:0; order: 1;"> 
         {{ content }}
     </div>
-
 </div>
 
 
@@ -55,7 +53,11 @@ layout: default
     background: #1f1f1f;
     color: #f8f8f8;
     flex-shrink: 0;
-  }}
+  }
+  .a {
+    display:flex; align-items:flex-start; gap:2rem;
+  }
+}
 .main {
     max-width: 65rem;
 }
