@@ -25,24 +25,23 @@ layout: default
 </div> -->
 
 <div style="display:flex; gap:1rem; flex-wrap:wrap;">
-  <div class="toc" style="
-      order:2; 
-      width:15rem; 
-      position:sticky; 
-      top:4rem; 
-      max-height:80vh; 
-      overflow:auto; 
-      padding:1rem; 
-      border:1px solid #444; 
-      border-radius:16px; 
-      background:#1f1f1f; 
-      color:#f8f8f8; 
-      flex-shrink:0;">
-    <div style="font-size: larger;">On This Page</div>
-    {% include toc.html html=content sanitize=true class="inline_toc" id="my_toc" h_min=2 %}
-  </div>
+  <div style="
+        width:15rem;
+        position:sticky;
+        top:4rem;
+        max-height:80vh;
+        overflow:auto;
+        padding:1rem;
+        border:1px solid #444;
+        border-radius:16px;
+        background:#1f1f1f;
+        color:#f8f8f8;
+        flex-shrink:0;">
+        <div style="font-size: larger;">On This Page</div>
+        {% include toc.html html=content sanitize=true class="inline_toc" id="my_toc" h_min=2 %}
+    </div>
 
-  <div style="flex:1; min-width:0; order:1;">
+  <div style="flex:1; min-width:0;">
     {{ content }}
   </div>
 </div>
@@ -53,6 +52,8 @@ layout: default
     order: -1;          /* move TOC before content */
     position: relative; /* disable sticky */
     width: 100%;        /* full width */
+    border: none;
+    background: none;
     min-width:0;
     flex: 1;
     margin-bottom: 1rem;
