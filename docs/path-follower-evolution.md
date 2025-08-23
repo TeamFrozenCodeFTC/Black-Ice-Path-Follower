@@ -7,6 +7,7 @@ nav_order: 4
 # The History and Evolution<br><sub>of Our Path Follower, Black Ice</sub>
 
 ### Prototype Versions
+{: .no_toc}
 
 - [v1.0 – **Basic, Autonomous Mecanum Drive** Using Wheel Encoder and IMU Heading Lock](#v10---wheel-encoder--imu)
 - [v2.0 - **Predictive Braking** Using Odometry Wheels and Zero Power Brake Mode](#v20---odometry-wheels--zeropowerbrakemode-stop-prediction)
@@ -44,6 +45,7 @@ With acquiring independent dead wheels, we discovered that there was no need to 
 So far, this prototype could only go from point to point; it could not follow paths with lines or curves.
 
 ### Preventing Overshoot
+{: .no_toc}
 Initially, the robot overshot because braking occurred only after reaching the target. To fix this, we decided to create a program that measures the robot's braking distance at different speeds using zero power brake mode. With those data points, we found that the velocity to braking distance was in the form of `ax^2 + bx`, so we used quadratic regression (in that form) to derive a function that accurately predicts the required braking distance at any speed.
 
 ![img.png](img.png)
@@ -77,9 +79,11 @@ We later would realize that this is just a more empirical version of a [PID cont
 **Fun Fact:** We originally thought our algorithm was falling apart here because it would be quite a few inches off from the target, so we tried adding Integral terms but eventually we figured out that one of our odometry pods was just defective.
 
 ### Continuing Momentum At End
+{: .no_toc}
 Another benefit was that the robot didn’t always need to stop completely. By checking whether the predicted braking distance was greater than or equal to the distance remaining, we could safely advance to the next target before overshooting. This way, the robot transitions to the next waypoint exactly when needed, avoiding overshoot and preventing the controller from braking unnecessarily.
 
 ### Separate Forward and Lateral Axis for Mecanum Wheels
+{: .no_toc}
 Later on, we experimented with creating separate braking predictors for the lateral and forward axes of the mecanum wheels. However, testing showed that the added complexity and tuning variables weren’t worth it. It was essentially like having separate PID controllers for each axis, which is unnecessary. The controller’s inherent predictiveness and corrective behavior already provided accurate and adaptable control.
 We did, however, add an extra lateral effort multiplier, which was worthwhile since strafing requires more power than moving forward or backward.
 

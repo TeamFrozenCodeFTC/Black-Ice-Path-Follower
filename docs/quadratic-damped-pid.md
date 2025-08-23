@@ -47,7 +47,7 @@ With quadratic damping + back-EMF braking:
 - **Higher power usage** - requires more voltage, applying reverse power to brake faster
 - **Sharper stops** - can feel less smooth (minor shaking at final stop)
 
-# How does -velocity = Derivative term in PID?
+## How does -velocity = Derivative term in PID?
 Let the positional error be:  
 
 $error = target_{pos} - current_{pos}$
