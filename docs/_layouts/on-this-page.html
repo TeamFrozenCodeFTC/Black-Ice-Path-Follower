@@ -37,6 +37,15 @@ layout: default
     </div>
 </div>
 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const toc = document.querySelector(".toc");
+  const firstHeader = document.querySelector("h1");
+  if (toc && firstHeader) {
+    firstHeader.insertAdjacentElement("afterend", toc);
+  }
+});
+</script>
 
 <style>
 @media (min-width: 801px) {

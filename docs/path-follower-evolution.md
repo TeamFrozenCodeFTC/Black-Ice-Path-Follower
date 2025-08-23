@@ -10,7 +10,7 @@ nav_order: 4
 {: .no_toc}
 
 - [v1.0 – **Basic, Autonomous Mecanum Drive** Using Wheel Encoder and IMU Heading Lock](#v10---wheel-encoder--imu)
-- [v2.0 - **Predictive Braking** Using Odometry Wheels and Zero Power Brake Mode](#v20---odometry-wheels--zeropowerbrakemode-stop-prediction)
+- [v2.0 - **Predictive Braking** Using Odometry Wheels and Zero Power Brake Mode](#v20---predictive-braking-using-odometry-wheels-and-zero-power-brake-moden)
 - [v3.0 - Corrective Braking Using a Quadratic-Damped PID](#v30---corrective-braking-using-a-quadratic-damped-pid)
 - [v4.0 – **Dynamic Lookahead Path Follower** for Lines and Curves](#v40---dynamic-lookahead-follower)
 - [v5.0 – Sophisticated Path Follower](#v50---sophisticated-follower)
@@ -32,7 +32,7 @@ After we realized we could retrieve the robot's heading from the IMU, it sparked
 
 **Fun Fact:** At the time, we had no idea that it was even called field-centric teleOp. We used to call it "controller relative TeleOp" because it was relative to the controller's orientation if the controller was relative to the field.
 
-## v2.0 - Odometry Wheels + ZeroPowerBrakeMode Stop Prediction
+## v2.0 - Predictive Braking Using Odometry Wheels and Zero Power Brake Mode
 ###### Intermediate version between our first and second competitions in 2024.
 {: .no_toc}
 
