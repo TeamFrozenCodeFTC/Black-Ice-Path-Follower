@@ -36,16 +36,38 @@ layout: default
         {{ content }}
     </div>
 </div>
-
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-  if (window.innerWidth <= 800) {
-    const toc = document.querySelector(".toc");
-    const firstHeader = document.querySelector("h1");
-    if (toc && firstHeader) {
-      firstHeader.insertAdjacentElement("afterend", toc);
+  const toc = document.querySelector(".toc");
+  const firstHeader = document.querySelector("h1");
+  const originalParent = toc?.parentNode;
+  const originalNextSibling = toc?.nextSibling;
+
+  function moveTOC() {
+    if (!toc || !firstHeader) return;
+
+    if (window.innerWidth <= 800) {
+      // Move TOC after first header
+      if (firstHeader.nextElementSibling !== toc) {
+        firstHeader.insertAdjacentElement("afterend", toc);
+      }
+    } else {
+      // Put TOC back in original place
+      if (originalParent && toc.parentNode !== originalParent) {
+        if (originalNextSibling) {
+          originalParent.insertBefore(toc, originalNextSibling);
+        } else {
+          originalParent.appendChild(toc);
+        }
+      }
     }
   }
+
+  // Run on load
+  moveTOC();
+
+  // Run on resize
+  window.addEventListener("resize", moveTOC);
 });
 </script>
 
