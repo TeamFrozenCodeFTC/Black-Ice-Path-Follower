@@ -2,7 +2,7 @@
 layout: default
 ---
 
-<div style="display:flex; align-items:flex-start; gap:2rem;">
+<!-- <div style="display:flex; align-items:flex-start; gap:2rem;">
     <div style="flex:1; min-width:0;"> 
         {{ content }}
     </div>
@@ -22,10 +22,43 @@ layout: default
         <div style="font-size: larger;">On This Page</div>
         {% include toc.html html=content sanitize=true class="inline_toc" id="my_toc" h_min=2 %}
     </div>
+</div> -->
+
+<div style="display:flex; gap:1rem; flex-wrap:wrap;">
+  <div class="toc" style="
+      order:2; 
+      width:15rem; 
+      position:sticky; 
+      top:4rem; 
+      max-height:80vh; 
+      overflow:auto; 
+      padding:1rem; 
+      border:1px solid #444; 
+      border-radius:16px; 
+      background:#1f1f1f; 
+      color:#f8f8f8; 
+      flex-shrink:0;">
+    <div style="font-size: larger;">On This Page</div>
+    {% include toc.html html=content sanitize=true class="inline_toc" id="my_toc" h_min=2 %}
+  </div>
+
+  <div style="flex:1; min-width:0; order:1;">
+    {{ content }}
+  </div>
 </div>
+
 <style>
-    .main {
-        max-width: 65rem;
-    }
+@media (max-width: 800px) {
+  .toc {
+    order: -1;          /* move TOC before content */
+    position: relative; /* disable sticky */
+    width: 100%;        /* full width */
+    max-height: none;
+    margin-bottom: 1rem;
+  }
+}
+.main {
+    max-width: 65rem;
+}
 </style>
 
