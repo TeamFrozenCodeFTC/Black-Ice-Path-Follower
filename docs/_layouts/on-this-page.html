@@ -2,12 +2,10 @@
 layout: default
 ---
 
-<!-- <div style="display:flex; align-items:flex-start; gap:2rem;">
-    <div style="flex:1; min-width:0;"> 
-        {{ content }}
-    </div>
-
+<div style="display:flex; align-items:flex-start; gap:2rem;">
+    
     <div style="
+        order: 2;
         width:15rem;
         position:sticky;
         top:4rem;
@@ -22,8 +20,13 @@ layout: default
         <div style="font-size: larger;">On This Page</div>
         {% include toc.html html=content sanitize=true class="inline_toc" id="my_toc" h_min=2 %}
     </div>
-</div> -->
 
+    <div style="flex:1; min-width:0; order: 1;"> 
+        {{ content }}
+    </div>
+
+</div>
+<!-- 
 <div style="display:flex; gap:1rem; flex-wrap:wrap;">
   <div style="
         width:15rem;
@@ -44,10 +47,16 @@ layout: default
   <div style="flex:1; min-width:0;">
     {{ content }}
   </div>
-</div>
+</div> -->
 
 <style>
-@media (max-width: 800px) {
+
+.main {
+    max-width: 65rem;
+}
+</style>
+
+<!-- /* @media (max-width: 800px) {
   .toc {
     order: -1;          /* move TOC before content */
     position: relative; /* disable sticky */
@@ -58,9 +67,4 @@ layout: default
     flex: 1;
     margin-bottom: 1rem;
   }
-}
-.main {
-    max-width: 65rem;
-}
-</style>
-
+} */ -->
