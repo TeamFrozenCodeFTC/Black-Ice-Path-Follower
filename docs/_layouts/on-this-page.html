@@ -39,10 +39,12 @@ layout: default
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-  const toc = document.querySelector(".toc");
-  const firstHeader = document.querySelector("h1");
-  if (toc && firstHeader) {
-    firstHeader.insertAdjacentElement("afterend", toc);
+  if (window.innerWidth <= 800) {
+    const toc = document.querySelector(".toc");
+    const firstHeader = document.querySelector("h1");
+    if (toc && firstHeader) {
+      firstHeader.insertAdjacentElement("afterend", toc);
+    }
   }
 });
 </script>
