@@ -54,6 +54,21 @@ With quadratic damping + back-EMF braking:
 
 It was worth creating our own path follower because it gave us our five specimen autnomous and led us to add a quadratic-damping term to our translational PID. This made the system nearly five times faster at decelerating. We never would have discovered this approach without building our own follower from scratch with all the eariler prototype and iterations. Seeing the braking power of zero power brake mode in eariler interations inspired us to create a follower that took advantage of that braking speed.
 
+## What We Learned
+- Java, the programming language
+- Mathematics
+   - Vectors, dot products, and linear algebra
+   - Kinematics equations
+   - Calculus concepts of Derivative and Integral in the context of PIDs
+- Clean code practices, including builders, factories, and abstraction, depency injection
+- PIDs and PIDFs controllers
+   - Along with more empirical implementations such as predicting stopping distance
+- How motors actually work
+   - Back-EMF braking
+- Documentation
+   - How to build and maintain a documentation website
+- Collaboration and teamwork
+
 ## Credits
 
 All code developed by **Jacob Ophoven** with help of **Coach Andy** and members of the FTC community.
