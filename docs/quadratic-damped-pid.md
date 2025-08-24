@@ -7,7 +7,7 @@ nav_order: 3
 # Our Key Innovation, the Quadratic-Damped PID
 
 Our key innovation about our follower is our quadratic-damped PID. We include this quadratic damping term in our translational PID, allowing it to be nearly **5x faster** at decelerating, more aggressive, and accurate while minimizing premature deceleration for faster deceleration. 
-You can learn about how we came up with this idea with [our first empirical approach](https://teamfrozencodeftc.github.io/Black-Ice-Path-Follower/path-follower-evolution.html#v30---corrective-braking-using-a-quadratic-damped-pid)
+You can learn about how we came up with this idea with [our first empirical approach.](https://teamfrozencodeftc.github.io/Black-Ice-Path-Follower/path-follower-evolution.html#v30---corrective-braking-using-a-quadratic-damped-pid)
 
 Pseudo code of PD controller with quadratic damping
 ```

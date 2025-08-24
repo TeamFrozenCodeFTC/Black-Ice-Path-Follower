@@ -26,9 +26,11 @@ After we realized we could retrieve the robot's heading from the IMU, it sparked
 ###### Intermediate version between our first and second competitions in 2024.
 {: .no_toc}
 
-[Why did we develop our own Path Follower?](https://github.com/TeamFrozenCodeFTC/Black-Ice-Path-Follower/blob/main/TeamCode/src/main/java/org/firstinspires/ftc/blackice/docs/why-we-developed-our-own.md#why-did-we-develop-our-own-path-follower)
-
-Used goBILDA pinpoint odometry to move toward a target, dynamically predicted the braking distance, then turned on zero power brake mode to stop.
+<sub>
+You may wonder why we didn't switch to a another path following library when we got odometry wheels. Learn about 
+[why did we developed our own path follower here.](https://teamfrozencodeftc.github.io/Black-Ice-Path-Follower/#why-did-we-develop-our-own-path-follower)
+</sub>
+Used goBILDA pinpoint odometry to move toward a target, dynamically predicted the braking distance, and then turned on zero power brake mode to stop.
 
 With acquiring independent dead wheels, we discovered that there was no need to slowly accelerate and decelerate because they would not slip like powered wheels. The robot could accelerate fully until the last moment when it needed to brake.
 

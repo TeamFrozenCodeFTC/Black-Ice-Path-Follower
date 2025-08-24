@@ -4,7 +4,7 @@ color_scheme: dark
 
 nav_order: 1
 has_children: true
-title: "Black Ice Path Follower"
+title: "Black Ice"
 
 kramdown:
   parse_block_html: true

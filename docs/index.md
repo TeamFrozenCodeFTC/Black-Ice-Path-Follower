@@ -44,26 +44,25 @@ With quadratic damping + back-EMF braking:
 - **Mecanum wheels** (other drivetrains supported if you implement the Drivetrain interface)
 - **Java + Android Studio**
 
-
 ## Why Did We Develop Our Own Path Follower?
 
 1. We wanted to create a **faster** path follower that could brake as fast as `ZeroPowerBrakeMode` when needed and did not have to always coast to a stop.
-   - This was because our goal for the 2024–2025 season was a five-specimen autonomous using only 312 RPM wheels and after scoring each specimen, the robot had to turn around. 
+   - This was because our goal for the 2024–2025 season was a five-specimen autonomous using only 312 RPM wheels and after scoring each specimen, the robot had to turn around. We had to solve this using software instead of hardware because we didn't have enough time to completely redesign our robot.
    - To achieve this, we needed our autonomous to be as fast as possible; something we couldn’t accomplish without having our deceleration as fast as `ZeroPowerBrakeMode`.
 2. We were **interested** in path following, and we wanted to intuitively **learn**, hands-on, how path following works.
 3. We wanted more **customization**, modularization, and less boilerplate when building paths and autonomous routines.
 
-It was worth creating our own path follower because it led us to add a quadratic-damping term to our translational PID. This made the system nearly five times faster at decelerating. We never would have discovered this approach without building our own follower with all the eariler prototype and iterations. Setting the goal of stopping as quickly and accurately as possible, using Zero Power Brake Mode as inspiration, pushed us to that breakthrough.
+It was worth creating our own path follower because it gave us our five specimen autnomous and led us to add a quadratic-damping term to our translational PID. This made the system nearly five times faster at decelerating. We never would have discovered this approach without building our own follower from scratch with all the eariler prototype and iterations. Seeing the braking power of zero power brake mode in eariler interations inspired us to create a follower that took advantage of that braking speed.
 
 ## Credits
 
 All code developed by **Jacob Ophoven** with help of **Coach Andy** and members of the FTC community.
 Thanks to Pedro Path developers, especially **Havish from 12808 RevAmped Robotics**, for supporting my project and wanting to implement it into Pedro Path (an advanced path follower used by teams at worlds).
 
-We have also given back to Pedro Path, our contributions to Pedro Path so far for v1.1.0 include:
+We have also given back to Pedro Path. Our contributions to Pedro Path so far for v1.1.0 include:
 - HeadingInterpolator interface
-- BezierCurve.through that creates a beizer curve that goes through the given points
 - Kinematics class
+- BezierCurve.through that creates a beizer curve that goes through the given points
 - Wrote the Docs for pedro's deceleration algorithm
 - Tested their new Bezier Curve class that uses Matrices
 
