@@ -7,7 +7,7 @@ nav_order: 3
 # Our Key Innovation, the Quadratic-Damped PID
 
 Our key innovation about our follower is our quadratic-damped PID. We include this quadratic damping term in our translational PID, allowing it to be nearly **5x faster** at decelerating, more aggressive, and accurate while minimizing premature deceleration for faster deceleration. 
-You can learn about how we came up with this idea with [our first empirical approach](https://github.com/TeamFrozenCodeFTC/Black-Ice-Path-Follower/blob/main/TeamCode/src/main/java/org/firstinspires/ftc/blackice/docs/path-follower-evolution.md#v30---corrective-braking-using-a-quadratic-damped-pid)
+You can learn about how we came up with this idea with [our first empirical approach](https://teamfrozencodeftc.github.io/Black-Ice-Path-Follower/path-follower-evolution.html#v30---corrective-braking-using-a-quadratic-damped-pid)
 
 Pseudo code of PD controller with quadratic damping
 ```
@@ -50,19 +50,27 @@ With quadratic damping + back-EMF braking:
 ## How does -velocity = Derivative term in PID?
 Let the positional error be:  
 
-$error = target_{pos} - current_{pos}$
+```math
+error = target_{pos} - current_{pos}
+```
 
 Taking the derivative of both sides:  
 
-$\frac{d}{dt}(error) = \frac{d}{dt}(target_{pos}) - \frac{d}{dt}(current_{pos})$
+```math
+\frac{d}{dt}(error) = \frac{d}{dt}(target_{pos}) - \frac{d}{dt}(current_{pos})
+```
 
 If the target position is constant, then:  
 
-$\frac{d}{dt}(\text{target}_{\text{pos}}) = 0$
+```math
+\frac{d}{dt}(\text{target}_{\text{pos}}) = 0
+```
 
 Then:  
 
-$\frac{d}{dt}(error) = -\frac{d}{dt}(current_{pos}) = -velocity$
+```math
+\frac{d}{dt}(error) = -\frac{d}{dt}(current_{pos}) = -velocity
+```
 
 Therefore, when the target position is fixed, the derivative of the position error is simply the **negative of the current velocity**.
 

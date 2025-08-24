@@ -10,7 +10,7 @@ Black Ice (by FTC Team #18535, Frozen Code) is a **reactive + predictive path fo
 
 It drives at **high speeds** and then brakes up to **5× faster** than other libraries.
 
-Black Ice achieves this by using [**quadratic-damped PIDs**](https://github.com/TeamFrozenCodeFTC/Black-Ice-Path-Follower/blob/main/TeamCode/src/main/java/org/firstinspires/ftc/blackice/docs/quadratic-damping-pid.md#our-key-innovation-the-quadratic-damped-pid), which model nonlinear friction and resistance. This lets it accurately predict stopping behavior at any speed, preventing the overshoot and undershoot common with aggressive PIDs that don't account for friction while braking. This allows much **faster**, more **accurate**, and more **responsive** control by braking to a stop rather than coasting to a stop like other libraries such as Roadrunner or Pedro Path.
+Black Ice achieves this by using [**quadratic-damped PIDs**](https://teamfrozencodeftc.github.io/Black-Ice-Path-Follower/quadratic-damped-pid.html), which model nonlinear friction and resistance. This lets it accurately predict stopping behavior at any speed, preventing the overshoot and undershoot common with aggressive PIDs that don't account for friction while braking. This allows much **faster**, more **accurate**, and more **responsive** control by braking to a stop rather than coasting to a stop like other libraries such as Roadrunner or Pedro Path.
 
 ## How much difference does the Quadratic Damping make?
 Other libraries (e.g. Roadrunner, Pedro Path) rely on gentle PID + coasting:

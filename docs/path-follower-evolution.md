@@ -43,12 +43,10 @@ Initially, the robot overshot because braking occurred only after reaching the t
 
 We commonly found our coefficients to be around `a=0.001` and `b=0.07`.
 
-- The `a` term accounts for friction and momentum when braking. This makes it much more accurate at high velocities when friction is more dominant than the wheels' braking force.
+- The `a` term accounts for the non-linear affects of friction when braking. This makes it much more accurate at high velocities when friction is more dominant than the wheels' braking force. Learn more about [why the braking distance is non-linear here.](https://teamfrozencodeftc.github.io/Black-Ice-Path-Follower/quadratic-damped-pid.html#why-is-the-braking-non-linear)
 - the `b` term is basically the robot's braking force from the wheels. Later on, we would realize that this term was just a more empirical version of the derivative term in PIDs.
 
 In this prototype version, it would just turn on zero power brake mode if the distance was greater than the distance remaining to the target point. This worked okay, but it could not correct while it was braking. In next prototype version we would fix this issue by turning it into a simple proportional controller.
-
-[Why is the Braking Distance Non-Linear?](https://github.com/TeamFrozenCodeFTC/Black-Ice-Path-Follower/blob/main/TeamCode/src/main/java/org/firstinspires/ftc/blackice/docs/quadratic-damping-pid.md#why-is-the-braking-non-linear)
 
 ## v3.0 - Corrective Braking Using a Quadratic-Damped PID
 ###### Final version used in the 2024–2025 season, first called Black-Ice at our second competition, and also used at our state championship.
@@ -64,7 +62,7 @@ predictedPositionAfterBraking = current + predictedBrakingDisplacement
 error = target - predictedPositionAfterBraking
 power = error * proportionalConstant
 ```
-We later would realize that this is just a more empirical version of a [PID controller with quadratic damping](https://github.com/TeamFrozenCodeFTC/Black-Ice-Path-Follower/edit/main/TeamCode/src/main/java/org/firstinspires/ftc/blackice/docs/path-follower-evolution.md#predictivebrakingcontroller--empirical-pid-controller-with-quadratic-damping). The `b` is just the derivative term, and the `a` is the quadratic damping.
+We later would realize that this is just a more empirical version of a [PID controller with quadratic damping](https://teamfrozencodeftc.github.io/Black-Ice-Path-Follower/path-follower-evolution.html#predictivebrakingcontroller--empirical-pid-controller-with-quadratic-damping). The `b` is just the derivative term, and the `a` is the quadratic damping.
 
 **Fun Fact:** We originally thought our algorithm was falling apart here because it would be quite a few inches off from the target, so we tried adding Integral terms but eventually we figured out that one of our odometry pods was just defective.
 
