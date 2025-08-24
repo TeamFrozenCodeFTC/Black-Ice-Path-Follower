@@ -6,16 +6,6 @@ nav_order: 4
 
 # The History and Evolution<br><sub>of Our Path Follower, Black Ice</sub>
 
-### Prototype Versions
-{: .no_toc}
-
-- [v1.0 – **Basic, Autonomous Mecanum Drive** Using Wheel Encoder and IMU Heading Lock](#v10---wheel-encoder--imu)
-- [v2.0 - **Predictive Braking** Using Odometry Wheels and Zero Power Brake Mode](#v20---predictive-braking-using-odometry-wheels-and-zero-power-brake-moden)
-- [v3.0 - Corrective Braking Using a Quadratic-Damped PID](#v30---corrective-braking-using-a-quadratic-damped-pid)
-- [v4.0 – **Dynamic Lookahead Path Follower** for Lines and Curves](#v40---dynamic-lookahead-follower)
-- [v5.0 – Sophisticated Path Follower](#v50---sophisticated-follower)
-  - translational, drive, heading, and deceleration profiles
-
 The beginnings of Black Ice started in our first season, INTO THE DEEP 2024-2025, with the development of our first autonomous frameworks. Our small framework was later was fully developed into a sophisticated follower in the 2025 off-season.
 
 ## v1.0 - Wheel Encoder + IMU
