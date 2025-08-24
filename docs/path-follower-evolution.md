@@ -6,6 +6,8 @@ nav_order: 4
 
 # The History and Evolution<br><sub>of Our Path Follower, Black Ice</sub>
 
+<br>
+
 The beginnings of Black Ice started in our first season, INTO THE DEEP 2024-2025, with the development of our first autonomous frameworks. Our small framework was later was fully developed into a sophisticated follower in the 2025 off-season.
 
 ## v1.0 - Wheel Encoder + IMU
@@ -26,10 +28,9 @@ After we realized we could retrieve the robot's heading from the IMU, it sparked
 ###### Intermediate version between our first and second competitions in 2024.
 {: .no_toc}
 
-<sub>
 You may wonder why we didn't switch to a another path following library when we got odometry wheels. Learn about 
 [why did we developed our own path follower here.](https://teamfrozencodeftc.github.io/Black-Ice-Path-Follower/#why-did-we-develop-our-own-path-follower)
-</sub>
+
 Used goBILDA pinpoint odometry to move toward a target, dynamically predicted the braking distance, and then turned on zero power brake mode to stop.
 
 With acquiring independent dead wheels, we discovered that there was no need to slowly accelerate and decelerate because they would not slip like powered wheels. The robot could accelerate fully until the last moment when it needed to brake.
