@@ -1,0 +1,62 @@
+package org.firstinspires.ftc.blackice.util.geometry;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import org.firstinspires.ftc.blackice.util.Utils;
+
+import java.util.Objects;
+
+public class Pose {
+    private final Vector position;
+    private final @Nullable Double heading;
+
+    public Pose(Vector position, @Nullable Double heading) {
+        this.position = position;
+        this.heading = heading;
+    }
+    
+    public Pose(double x, double y) {
+        this(new Vector(x, y), null);
+    }
+    
+    public Pose(double x, double y, double heading) {
+        this(new Vector(x, y), heading);
+    }
+    
+    public Vector getPosition() {
+        return position;
+    }
+    
+    public boolean hasHeading() {
+        return heading != null;
+    }
+    
+    public @NonNull Double getHeading() {
+        return Objects.requireNonNull(heading, "heading is null");
+    }
+    
+    public @Nullable Double getNullableHeading() {
+        return heading;
+    }
+
+    public Pose withHeading(double heading) {
+        return new Pose(position, heading);
+    }
+    public Pose withPosition(Vector position) {
+        return new Pose(position, heading);
+    }
+    public Pose withX(double x) {
+        return new Pose(position.withX(x), heading);
+    }
+    public Pose withY(double y) {
+        return new Pose(position.withY(y), heading);
+    }
+    
+    public Pose completeWith(Pose pose) {
+        return new Pose(
+            this.position,
+            Utils.getOrDefault(heading, pose.getHeading())
+        );
+    }
+}
