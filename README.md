@@ -4,6 +4,13 @@ Please visit our website and documentation: https://teamfrozencodeftc.github.io/
 
 Jump to the code powering Black Ice: https://github.com/TeamFrozenCodeFTC/Black-Ice-Path-Follower/tree/main/TeamCode/src/main/java/org/firstinspires/ftc/blackice
 
+Key Code Files:
+- [Example opMode](https://github.com/TeamFrozenCodeFTC/Black-Ice-Path-Follower/blob/main/TeamCode/src/main/java/org/firstinspires/ftc/blackice/examples/Example.java)
+- [Vector and Drive Power Calculations](https://github.com/TeamFrozenCodeFTC/Black-Ice-Path-Follower/blob/main/TeamCode/src/main/java/org/firstinspires/ftc/blackice/core/follower/DrivePowerController.java) 
+- [Following Path Routines Logic](https://github.com/TeamFrozenCodeFTC/Black-Ice-Path-Follower/blob/main/TeamCode/src/main/java/org/firstinspires/ftc/blackice/core/follower/PathRoutineController.java)
+- [Quadratic-Damped PID implementation](https://github.com/TeamFrozenCodeFTC/Black-Ice-Path-Follower/blob/main/TeamCode/src/main/java/org/firstinspires/ftc/blackice/core/control/QuadraticDampedPIDController.java)
+
+
 ## Requirements
 1. Program in Java and use Android Studio. Steps to setup Android Studio [here](https://ftc-docs.firstinspires.org/en/latest/programming_resources/tutorial_specific/android_studio/installing_android_studio/Installing-Android-Studio.html) if you haven't already. 
 2. Have odometry wheels or some form of localization.
