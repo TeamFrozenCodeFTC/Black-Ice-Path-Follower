@@ -50,27 +50,30 @@ With quadratic damping + back-EMF braking:
 ## How does -velocity = Derivative term in PID?
 Let the positional error be:  
 
-```math
-error = target_{pos} - current_{pos}
+```
+error = target - current
 ```
 
 Taking the derivative of both sides:  
 
-```math
-\frac{d}{dt}(error) = \frac{d}{dt}(target_{pos}) - \frac{d}{dt}(current_{pos})
+```
+d/dt error = d/dt target - d/dt current
 ```
 
 If the target position is constant, then:  
 
-```math
-\frac{d}{dt}(\text{target}_{\text{pos}}) = 0
+```
+d/dt target = 0
 ```
 
 Then:  
 
-```math
-\frac{d}{dt}(error) = -\frac{d}{dt}(current_{pos}) = -velocity
+```
+d/dt error = 0 - d/dt current
 ```
 
-Therefore, when the target position is fixed, the derivative of the position error is simply the **negative of the current velocity**.
+Since the rate of change of the current position is just velocity, when the target position is fixed, the derivative of the position error is simply the **negative of the current velocity**.
 
+```
+d/dt error = -velocity
+```
