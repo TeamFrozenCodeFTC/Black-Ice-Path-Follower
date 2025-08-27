@@ -282,7 +282,6 @@ public class PathBehavior implements Cloneable {
      *
      * @param deceleration (inches/s^2) How fast the robot decelerates at the end of the path.
      *                     Sign should be positive. Average value range 30-120ish.
-     * @see #setMaxVelocity
      * @see #setAcceleration
      * @see #setEndingVelocity
      */
@@ -511,7 +510,7 @@ public class PathBehavior implements Cloneable {
         return this;
     }
     
-    public Boolean doesStopAtEnd() {
+    public StopMode doesStopAtEnd() {
         return stop;
     }
     public VelocityProfile getVelocityProfile() {

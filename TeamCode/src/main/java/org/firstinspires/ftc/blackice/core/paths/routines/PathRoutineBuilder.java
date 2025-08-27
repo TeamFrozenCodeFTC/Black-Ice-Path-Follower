@@ -38,7 +38,7 @@ public class PathRoutineBuilder {
     private PathBehavior defaultPathBehavior = new PathBehavior();
     
     private final List<RoutineStepFactory> steps = new ArrayList<>();
-    private Pose startingPose;
+    public Pose startingPose;
     private Consumer<PathFactory> queuedChanges = pathFactory -> {};
     
     private @Nullable PathFactory currentPath = null;

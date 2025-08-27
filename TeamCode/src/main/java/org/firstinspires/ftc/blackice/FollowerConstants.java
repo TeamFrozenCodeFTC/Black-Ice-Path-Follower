@@ -47,7 +47,8 @@ public final class FollowerConstants {
         .positionalPID(new QuadraticDampedPIDController(0.5, 0.07, 0.001))
         .driveVelocityController(new VelocityController(0.01, 0.0159, 0.04, 40)) // 34
         // only needed for following velocity profiles.
-        .maxReversalBrakingPower(0.3)
+        .maxReversalBrakingPower(0.2) // has crashed once at -0.3 but is a lot easier
+        // to manage when crashed
         .centripetalFeedforward(0.005) // only needed for following curves
         .stopIfVoltageBelow(7);
 }

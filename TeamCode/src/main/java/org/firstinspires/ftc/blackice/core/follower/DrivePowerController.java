@@ -8,6 +8,7 @@ import org.firstinspires.ftc.blackice.core.hardware.drivetrain.Drivetrain;
 import org.firstinspires.ftc.blackice.util.Logger;
 import org.firstinspires.ftc.blackice.util.Validator;
 import org.firstinspires.ftc.blackice.util.geometry.Vector;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 /**
  * Uses error controllers to convert target velocities and positions into vectors and
@@ -41,7 +42,6 @@ class DrivePowerController {
     double lastDrivePower = 1;
     double totalError = 0;
     double iterations = 0;
-    private boolean hasBraked = false;
     
     public DrivePowerController(PIDController headingPID,
                                 PIDController positionalPID,
@@ -176,9 +176,9 @@ class DrivePowerController {
         return perpendicularDirection.withMagnitude(translationalPower);
     }
     
-    public BrakingStatus isBraking(PathState pathState) {
+    public BrakingStatus isBraking(PathState pathState, boolean hasBraked) {
         return new BrakingStatus(computeBrakingPower(pathState), pathState,
-                                 lastDrivePower);
+                                 lastDrivePower, hasBraked);
     }
     
     public void brakeWithZeroPowerBrakeMode() {
@@ -186,9 +186,7 @@ class DrivePowerController {
     }
     
     public void drive(PathState pathState, BrakingStatus brakingStatus) {
-        if (brakingStatus.isBraking || hasBraked) {
-            hasBraked = true;
-            
+        if (brakingStatus.isBraking) {
             double turnPower = computeHeadingCorrectionPower(pathState);
             
             Logger.verbose("brakingPower", brakingStatus.brakingPower);
@@ -257,7 +255,8 @@ class DrivePowerController {
     
     public double computeHeadingCorrectionPower(PathState pathState) {
         double targetHeading =
-            pathState.path.headingInterpolator.interpolate(pathState.closestPathPoint);
+            AngleUnit.RADIANS.normalize(pathState.path.headingInterpolator.interpolate(pathState.closestPathPoint));
+        // may need to change turning direction if goes in wrong direction
         return Range.clip(headingPID.run(targetHeading, pathState.motionState.heading,
                                          pathState.motionState.deltaTime), -1, 1);
     }
@@ -266,13 +265,14 @@ class DrivePowerController {
         public final boolean isBraking;
         final Vector brakingPower;
         
-        BrakingStatus(Vector brakingPower, PathState pathState, double drivePower) {
+        BrakingStatus(Vector brakingPower, PathState pathState, double drivePower,
+                      boolean hasBraked) {
             boolean isNearEnd = pathState.closestPathPoint.distanceRemaining <= 20;
             boolean isDecelerating = brakingPower.computeMagnitude() < drivePower;
             boolean isReversing =
                 brakingPower.dotProduct(pathState.closestPathPoint.tangent) < 0;
             
-            this.isBraking = isNearEnd && (isDecelerating || isReversing);
+            this.isBraking = hasBraked || (isNearEnd && (isDecelerating || isReversing));
             this.brakingPower = brakingPower;
         }
     }

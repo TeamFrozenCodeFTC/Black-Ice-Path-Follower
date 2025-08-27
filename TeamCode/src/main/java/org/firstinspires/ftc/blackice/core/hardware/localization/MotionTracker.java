@@ -25,8 +25,12 @@ public class MotionTracker {
         
         allHubs = hardwareMap.getAll(LynxModule.class);
         
+        // TODO fix heading not being able to be set at init to pinpoint
+//        for (LynxModule module : allHubs) {
+//            module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+//        }
         for (LynxModule module : allHubs) {
-            module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+            module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
     }
 
@@ -46,9 +50,9 @@ public class MotionTracker {
     }
     
     public void update() {
-        for (LynxModule module : allHubs) {
-            module.clearBulkCache();
-        }
+//        for (LynxModule module : allHubs) {
+//            module.clearBulkCache();
+//        }
         
         localizer.update();
 

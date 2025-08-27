@@ -26,7 +26,7 @@ public class PathRoutineController {
     private MotionState motionState;
     private PathState pathState;
     private PathPoint closestPathPoint;
-    private boolean isBraking = false;
+    private boolean hasBraked = false;
     private double previousPathPointTValue;
     private @Nullable Path currentPath;
     
@@ -50,6 +50,10 @@ public class PathRoutineController {
         drivePowerController.useHeading = useHeading;
     }
     
+    public void centripetalScaling(double scaling) {
+        drivePowerController.centripetalScaling = scaling;
+    }
+    
     public enum FollowingState {
         /** The follower is currently following a path. */
         FOLLOWING,
@@ -70,8 +74,6 @@ public class PathRoutineController {
     ) {
         this.drivePowerController = drivePowerController;
         this.motionTracker = motionTracker;
-
-        updateMotionState();
     }
     
     public Drivetrain getDrivetrain() {
@@ -90,6 +92,7 @@ public class PathRoutineController {
      */
     public void setCurrentPose(Pose pose) {
         motionTracker.setCurrentPose(pose);
+        motionState = motionTracker.getMotionState();
     }
     
     public void setCurrentHeading(double heading) {
@@ -116,6 +119,7 @@ public class PathRoutineController {
      */
     public void startFollowing(PathRoutine pathRoutine) {
         routineAdvancer = new Advancer<>(pathRoutine.getSteps());
+        hasBraked = false;
         startNextPath();
     }
     
@@ -176,7 +180,7 @@ public class PathRoutineController {
         currentPath = path;
         
         followingState = FollowingState.FOLLOWING;
-        isBraking = false;
+        hasBraked = false;
         previousPathPointTValue = 0;
         followingTimeouts.start();
         
@@ -338,16 +342,16 @@ public class PathRoutineController {
         Logger.debug("nextPosition", motionState.nextPosition);
         
         DrivePowerController.BrakingStatus brakingStatus =
-            drivePowerController.isBraking(pathState);
+            drivePowerController.isBraking(pathState, hasBraked);
         
-        if (brakingStatus.isBraking || isBraking) {
+        if (brakingStatus.isBraking) {
             Logger.debug("isBraking -------------------");
             if (getCurrentPath().behavior.stop == PathBehavior.StopMode.NONE) {
                 drivePowerController.drivetrain.zeroPower();
                 getCurrentActionLoop().finish();
                 return;
             }
-            isBraking = true;
+            hasBraked = true;
             if (hasStoppedAtSegmentEnd(pathState.motionState)) {
                 if (getCurrentActionLoop().canFinish()) {
                     getCurrentActionLoop().finish();
@@ -376,7 +380,7 @@ public class PathRoutineController {
      * Returns true if the follower is braking to a stop or is holding a pose.
      */
     public boolean isBraking() {
-        return isBraking;
+        return hasBraked;
     }
     
     private boolean hasStoppedAtSegmentEnd(MotionState motionState) {

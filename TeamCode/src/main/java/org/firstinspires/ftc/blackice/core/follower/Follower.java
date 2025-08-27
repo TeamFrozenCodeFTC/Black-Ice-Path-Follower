@@ -31,7 +31,7 @@ public class Follower extends PathRoutineController {
     
     public final Drivetrain drivetrain;
     
-    private final Pose startingPose;
+    public final Pose startingPose;
     
     private final double pauseWhenVoltageBelow;
     private final List<VoltageSensor> voltageSensors;

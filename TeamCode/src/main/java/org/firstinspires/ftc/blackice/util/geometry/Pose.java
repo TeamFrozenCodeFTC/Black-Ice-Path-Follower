@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.blackice.util.geometry;
 
+import android.annotation.SuppressLint;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -58,5 +60,13 @@ public class Pose {
             this.position,
             Utils.getOrDefault(heading, pose.getHeading())
         );
+    }
+    
+    @SuppressLint("DefaultLocale")
+    @NonNull
+    public String toString() {
+        return String.format("Pose{x=%.2f,y=%.2f,h=%.2f", position.getX(),
+                             position.getY(),
+                             heading);
     }
 }
