@@ -26,9 +26,9 @@ public class Example extends LinearOpMode {
         
         waitForStart();
         
-        follower.startFollowing(path);
+        follower.follow(path);
 
-        while (opModeIsActive()) {
+        while (opModeIsActive() && follower.isInProgress()) {
             follower.update();
         }
     }

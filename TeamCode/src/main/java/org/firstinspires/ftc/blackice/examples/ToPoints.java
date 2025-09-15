@@ -3,11 +3,9 @@ package org.firstinspires.ftc.blackice.examples;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.blackice.core.follower.Follower;
 import org.firstinspires.ftc.blackice.core.paths.routines.PathRoutine;
-import org.firstinspires.ftc.blackice.util.Logger;
 
 @Autonomous(group="Black-Ice Examples")
 public class ToPoints extends LinearOpMode {
@@ -24,7 +22,7 @@ public class ToPoints extends LinearOpMode {
         
         waitForStart();
         
-        follower.startFollowing(path);
+        follower.follow(path);
         
         while (opModeIsActive()) {
             follower.update();

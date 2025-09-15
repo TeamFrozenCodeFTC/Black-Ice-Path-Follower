@@ -28,7 +28,7 @@ public class Decel extends LinearOpMode {
         
         waitForStart();
         
-        follower.startFollowing(path);
+        follower.follow(path);
         
         while (opModeIsActive()) {
             double result = Double.POSITIVE_INFINITY;

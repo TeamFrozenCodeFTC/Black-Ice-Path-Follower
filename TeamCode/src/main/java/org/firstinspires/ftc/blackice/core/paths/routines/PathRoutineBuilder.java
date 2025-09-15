@@ -68,9 +68,6 @@ public class PathRoutineBuilder {
         
         ArrayList<RoutineStep> steps = new ArrayList<>();
         for (RoutineStepFactory step : this.steps) {
-//            if (step instanceof PathFactory) {
-//                ((PathFactory) step).headingInterpolatorSupplier = previousEndPose ->
-//            }
             RoutineStep routineStep = step.toRoutineStep(previousEndPose);
             steps.add(routineStep);
             if (routineStep instanceof Path) {
@@ -124,26 +121,27 @@ public class PathRoutineBuilder {
         return builder;
     }
     
-//    public PathRoutineBuilder copyReverse() {
-//        PathRoutineBuilder builder = new PathRoutineBuilder(currentPoseSupplier);
-//        for (int i = this.steps.size() - 1; i >= 0; i--) {
-//            RoutineStepFactory step = this.steps.get(i);
-//            if (!(step instanceof PathFactory)) {
-//                this.steps.add(step);
-//                builder.currentPathEditable = false;
-//                continue;
-//            }
-//            PathFactory path = (PathFactory) step;
-//            PathFactory copy = new PathFactory(
-//                path.geometrySupplier, // TODO reverse the geometry and heading
-//                path.headingInterpolatorSupplier,
-//                path.behavior.clone(),
-//                path.targetHeading
-//            );
-//            builder.addPath(copy);
-//        }
-//        return builder;
-//    }
+    public PathRoutineBuilder copyReverse() {
+        PathRoutineBuilder builder = new PathRoutineBuilder(currentPoseSupplier);
+        for (int i = this.steps.size() - 1; i >= 0; i--) {
+            RoutineStepFactory step = this.steps.get(i);
+            if (!(step instanceof PathFactory)) {
+                this.steps.add(step);
+                builder.currentPathEditable = false;
+                continue;
+            }
+            PathFactory path = (PathFactory) step;
+            PathFactory copy = new PathFactory(
+                previousPoint -> path.geometrySupplier.get(previousPoint).reversed(),
+                (previousHeading,
+                targetHeading) -> path.headingInterpolatorSupplier.get(previousHeading,targetHeading).reversed(),
+                path.behavior.clone(),
+                path.targetHeading
+            );
+            builder.addPath(copy);
+        }
+        return builder;
+    }
     
     private PathRoutineBuilder addPath(PathGeometry geometry) {
         return addPath(start -> geometry);
@@ -245,17 +243,17 @@ public class PathRoutineBuilder {
     }
     
     /**
-     * Sets the last added path so that it starts from the robot's current position
-     * instead of the previous path's end pose. If no last path, then this will make
-     * the next added path start from the robot's current position.
+     * Sets the last added path so that it starts from a future pose (such as the robot's
+     * current position) instead of the previous path's end pose. If no last path, then
+     * this will edit the next added path.
      * <p>
      * Note: makes this path a runtime path, meaning it will not be built until
      * follower.startFollowing is called.
      */
-    public PathRoutineBuilder fromCurrentPose() {
+    public PathRoutineBuilder fromFuturePose(PathFactory.PoseProvider poseProvider) {
         return editPath(path -> {
             path.isRuntimePath = true;
-            path.startingPoseSupplier = previousPose -> currentPoseSupplier.get();
+            path.startingPoseSupplier = poseProvider;
         });
     }
 

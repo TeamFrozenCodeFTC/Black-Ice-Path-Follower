@@ -30,4 +30,14 @@ public class FixedPoint implements PathGeometry {
     public PathPoint getEndPathPoint() {
         return endPoint;
     }
+    
+    @Override
+    public FixedPoint reversed() {
+        return this;
+    }
+    
+    @Override
+    public PathGeometry mirrored() {
+        return new FixedPoint(endPoint.point.mirroredAcrossYAxis());
+    }
 }

@@ -1,15 +1,27 @@
 package org.firstinspires.ftc.blackice.core.hardware.drivetrain;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.blackice.util.geometry.Vector;
 
-class Mecanum extends Drivetrain {
+class Mecanum implements Drivetrain {
     public final double strafingEffortMultiplier;
+    public final DcMotorEx[] motors;
 
     public Mecanum(HardwareMap map, MecanumConfig config) {
-        super(initMotors(map, config));
+        DcMotorEx frontLeft = map.get(DcMotorEx.class, config.frontLeftName);
+        DcMotorEx backLeft = map.get(DcMotorEx.class, config.backLeftName);
+        DcMotorEx frontRight = map.get(DcMotorEx.class, config.frontRightName);
+        DcMotorEx backRight = map.get(DcMotorEx.class, config.backRightName);
+        
+        frontLeft.setDirection(config.frontLeftDirection);
+        backLeft.setDirection(config.backLeftDirection);
+        frontRight.setDirection(config.frontRightDirection);
+        backRight.setDirection(config.backRightDirection);
+        
+        this.motors = new DcMotorEx[] { frontLeft, backLeft, frontRight, backRight };
         this.strafingEffortMultiplier = config.maxForwardSpeed / config.maxStrafeSpeed;
     }
 
@@ -51,17 +63,24 @@ class Mecanum extends Drivetrain {
         }
     }
     
-    private static DcMotorEx[] initMotors(HardwareMap map, MecanumConfig config) {
-        DcMotorEx frontLeft = map.get(DcMotorEx.class, config.frontLeftName);
-        DcMotorEx backLeft = map.get(DcMotorEx.class, config.backLeftName);
-        DcMotorEx frontRight = map.get(DcMotorEx.class, config.frontRightName);
-        DcMotorEx backRight = map.get(DcMotorEx.class, config.backRightName);
-        
-        frontLeft.setDirection(config.frontLeftDirection);
-        backLeft.setDirection(config.backLeftDirection);
-        frontRight.setDirection(config.frontRightDirection);
-        backRight.setDirection(config.backRightDirection);
-
-        return new DcMotorEx[]{ frontLeft, backLeft, frontRight, backRight };
+    @Override
+    public void zeroPowerBrakeMode() {
+        for (DcMotorEx motor : motors) {
+            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
+    }
+    
+    @Override
+    public void zeroPower() {
+        for (DcMotorEx motor : motors) {
+            motor.setPower(0);
+        }
+    }
+    
+    @Override
+    public void zeroPowerFloatMode() {
+        for (DcMotorEx motor : motors) {
+            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        }
     }
 }

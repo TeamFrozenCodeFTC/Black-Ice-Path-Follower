@@ -2,7 +2,7 @@ package org.firstinspires.ftc.blackice;
 
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.blackice.core.control.VelocityController;
+import org.firstinspires.ftc.blackice.core.control.MomentumCompensatedController;
 import org.firstinspires.ftc.blackice.core.hardware.localization.localizers.GoBildaPinpointDriver;
 import org.firstinspires.ftc.blackice.core.hardware.localization.localizers.LocalizerConfig;
 import org.firstinspires.ftc.blackice.core.hardware.localization.localizers.PinpointConfig;
@@ -43,12 +43,13 @@ public final class FollowerConstants {
         .localizerConfig(localizerConfig)
         .drivetrainConfig(drivetrainConfig)
         .defaultPathBehavior(defaultPathBehavior)
-        .headingPID(new PIDFController(2, 0, 0.1, 0))
-        .positionalPID(new QuadraticDampedPIDController(0.5, 0.07, 0.001))
-        .driveVelocityController(new VelocityController(0.01, 0.0159, 0.04, 40)) // 34
-        // only needed for following velocity profiles.
+        .headingPID(new PIDFController(2, 0, 0.1, 0.01, 0))
+        .positionalPID(new QuadraticDampedPIDController(0.5, 0.07, 0.001, 0.015))
+        .driveVelocityController(new PIDFController(0.01, 0, 0, 0.04, 0.0159))
+        .naturalDeceleration(40) // only needed for following velocity profiles.
         .maxReversalBrakingPower(0.2) // has crashed once at -0.3 but is a lot easier
         // to manage when crashed
+        .tunedVoltage(12.0)
         .centripetalFeedforward(0.005) // only needed for following curves
         .stopIfVoltageBelow(7);
 }

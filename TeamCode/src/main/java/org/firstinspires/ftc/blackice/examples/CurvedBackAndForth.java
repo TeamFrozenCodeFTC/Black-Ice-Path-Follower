@@ -14,7 +14,6 @@ import org.firstinspires.ftc.blackice.util.Logger;
 import org.firstinspires.ftc.blackice.util.geometry.Pose;
 import org.firstinspires.ftc.blackice.util.geometry.Vector;
 import org.firstinspires.ftc.blackice.core.paths.routines.PathRoutine;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +21,6 @@ import java.util.List;
 @Config
 @Autonomous(group="Black-Ice Examples")
 public class CurvedBackAndForth extends LinearOpMode {
-    public static double centripetalScaling = 0.005;
-    public static boolean useTranslational = false;
-    
     @Override
     public void runOpMode() {
         Follower follower = new Follower(hardwareMap, new Pose(0, 0, 45));
@@ -43,7 +39,7 @@ public class CurvedBackAndForth extends LinearOpMode {
             PathRoutine path2 = follower.pathRoutineBuilder()
                 .withStartPose(path1.endPose)
                 .curveTo(new Vector(24, 12), new Vector(0, 0))
-                .withHeadingInterpolator(HeadingInterpolator.tangent.reverse())
+                .withHeadingInterpolator(HeadingInterpolator.tangent.backwards())
                 .stop()
                 .build();
             
@@ -52,11 +48,8 @@ public class CurvedBackAndForth extends LinearOpMode {
             Logger.debug("endPose2", path2.endPose);
             Logger.debug("endPose1", path1.endPose);
             
-            follower.useTranslational(useTranslational);
-            follower.centripetalScaling(centripetalScaling);
-            
             // --- follow first path ---
-            follower.startFollowing(path1);
+            follower.follow(path1);
             
             List<Double> pathXs = new ArrayList<>();
             List<Double> pathYs = new ArrayList<>();
@@ -105,7 +98,7 @@ public class CurvedBackAndForth extends LinearOpMode {
             }
             
                         // --- follow second path ---
-                        follower.startFollowing(path2);
+                        follower.follow(path2);
 
                         // reset lists for new routine
                         pathXs.clear();

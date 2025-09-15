@@ -19,9 +19,6 @@ public class BezierCurve implements PathGeometry {
     private final double length;
     private final PathPoint endPathPoint;
     private final TreeMap<Double, Double> arcLengthLookup = new TreeMap<>();
-    // TODO use closest point to dynamically calculate distance, is less accurate but
-    //  less memory
-    // distanceAlongPath += previous.distanceTo(point) * sign(t - previousT)
 
     public BezierCurve(Vector... controlPoints) {
         this.controlPoints = controlPoints;
@@ -29,7 +26,25 @@ public class BezierCurve implements PathGeometry {
         this.endPathPoint = new PathPoint(this.controlPoints[this.controlPoints.length - 1],
                                           calculateFirstDerivative(1), 0, this.length, 0, 1, 1);
     }
-
+    
+    @Override
+    public BezierCurve reversed() {
+        Vector[] reversedControlPoints = new Vector[controlPoints.length];
+        for (int i = 0; i < controlPoints.length; i++) {
+            reversedControlPoints[i] = controlPoints[controlPoints.length - 1 - i];
+        }
+        return new BezierCurve(reversedControlPoints);
+    }
+    
+    @Override
+    public BezierCurve mirrored() {
+        Vector[] mirroredControlPoints = new Vector[controlPoints.length];
+        for (int i = 0; i < controlPoints.length; i++) {
+            mirroredControlPoints[i] = controlPoints[i].mirroredAcrossYAxis();
+        }
+        return new BezierCurve(mirroredControlPoints);
+    }
+    
     @Override
     public double length() {
         return length;
@@ -94,8 +109,7 @@ public class BezierCurve implements PathGeometry {
         } while (iteration <= maxIterations);
 
         Vector tangent = firstDerivative.normalized();
-        double curvature = computeCurvature(firstDerivative, secondDerivative); //
-        // curvature = deltaT?
+        double curvature = computeCurvature(firstDerivative, secondDerivative);
         double arcLength = getArcLengthAt(t);
         return new PathPoint(bezierPoint, tangent, curvature, arcLength,
                              length - arcLength,

@@ -27,7 +27,7 @@ public class TeleOpMacro extends LinearOpMode {
         );
         
         PathRoutine path = follower.pathRoutineBuilder()
-            .fromCurrentPose()
+            .fromFuturePose()
             .toPose(0, 0)
             .stop()
             .build();
@@ -37,7 +37,7 @@ public class TeleOpMacro extends LinearOpMode {
         while (opModeIsActive()) {
             // Goes to 0,0 when pressing dpad down
             if (gamepad1.dpadDownWasPressed()) {
-                follower.startFollowing(path);
+                follower.follow(path);
                 gamepad1.rumble(Haptics.CONFIRM);
             }
             

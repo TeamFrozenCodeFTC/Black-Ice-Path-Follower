@@ -23,10 +23,25 @@ public interface HeadingInterpolator {
     }
     
     /**
-     * Reverses or rotates the heading interpolator by 180 degrees.
+     * Rotates the heading interpolator by 180 degrees.
      */
-    default HeadingInterpolator reverse() {
+    default HeadingInterpolator backwards() {
         return offset(180);
+    }
+    
+    /**
+     * Switches the start and end of the heading interpolator. Does nothing if constant
+     * or tangent.
+     */
+    default HeadingInterpolator reversed() {
+        return this;
+    }
+    
+    /**
+     * Mirrors the heading interpolation along the y-axis.
+     */
+    default HeadingInterpolator mirrored() {
+        return pathPoint -> Math.PI - this.interpolate(pathPoint);
     }
     
     /**
@@ -55,12 +70,19 @@ public interface HeadingInterpolator {
      * @param finishPercent The t parameter (0-1) at which the heading should reach endHeadingDeg
      */
     static HeadingInterpolator linear(double startHeading, double endHeading, double finishPercent) {
-        return pathPoint -> {
-            double t = Math.min(pathPoint.percentAlongPath / finishPercent, 1.0);
-            double startHeading_ = Math.toRadians(startHeading);
-            double endHeading_ = Math.toRadians(endHeading);
-            double deltaHeading = AngleUnit.RADIANS.normalize(endHeading_ - startHeading_);
-            return startHeading_ + deltaHeading * t;
+        return new HeadingInterpolator() {
+            @Override
+            public double interpolate(PathPoint pathPoint) {
+                double t = Math.min(pathPoint.percentAlongPath / finishPercent, 1.0);
+                double startHeading_ = Math.toRadians(startHeading);
+                double endHeading_ = Math.toRadians(endHeading);
+                double deltaHeading = AngleUnit.RADIANS.normalize(endHeading_ - startHeading_);
+                return startHeading_ + deltaHeading * t;
+            }
+            @Override
+            public HeadingInterpolator reversed() {
+                return linear(endHeading, startHeading, finishPercent);
+            }
         };
     }
     

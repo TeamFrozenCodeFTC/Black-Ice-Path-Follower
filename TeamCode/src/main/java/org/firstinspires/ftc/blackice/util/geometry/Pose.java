@@ -34,6 +34,11 @@ public class Pose {
         return heading != null;
     }
     
+    public Pose mirroredAcrossYAxis() {
+        new Pose(144 - position.getX(), position.getY(), heading == null ? null :
+            180 - heading);
+    }
+    
     public @NonNull Double getHeading() {
         return Objects.requireNonNull(heading, "heading is null");
     }

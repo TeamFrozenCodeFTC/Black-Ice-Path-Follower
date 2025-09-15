@@ -1,9 +1,8 @@
 package org.firstinspires.ftc.blackice.core.follower;
 
+import org.firstinspires.ftc.blackice.core.control.ErrorController;
 import org.firstinspires.ftc.blackice.core.hardware.drivetrain.DrivetrainConfig;
-import org.firstinspires.ftc.blackice.core.control.PIDController;
 import org.firstinspires.ftc.blackice.core.control.QuadraticDampedPIDController;
-import org.firstinspires.ftc.blackice.core.control.VelocityController;
 import org.firstinspires.ftc.blackice.core.hardware.localization.localizers.LocalizerConfig;
 import org.firstinspires.ftc.blackice.core.paths.PathBehavior;
 import org.firstinspires.ftc.blackice.util.Validator;
@@ -14,13 +13,31 @@ import org.firstinspires.ftc.blackice.util.Validator;
 public class FollowerConfig {
     LocalizerConfig localizerConfig;
     DrivetrainConfig drivetrainConfig;
-    PIDController headingPID;
-    PIDController positionalPID;
-    VelocityController driveVelocityPIDF;
+    ErrorController headingPID;
+    ErrorController positionalPID;
+    ErrorController driveVelocityPIDF;
     PathBehavior defaultPathBehavior = new PathBehavior();
+    
     double centripetalFeedforward = 0.005;
     double maxReversalBrakingPower = 0.3;
     double stopIfVoltageBelow = 7;
+    double naturalDeceleration = 40;
+    double tunedVoltage = 12.0;
+    
+    public FollowerConfig tunedVoltage(double tunedVoltage) {
+        this.tunedVoltage = Validator.ensurePositiveSign(tunedVoltage);
+        return this;
+    }
+    
+    /**
+     * The natural deceleration of your robot (in/s^2).
+     * Should be positive. Used for momentum damping.
+     * Only needed for smooth deceleration with velocity profiles.
+     */
+    public FollowerConfig naturalDeceleration(double naturalDeceleration) {
+        this.naturalDeceleration = Validator.ensurePositiveSign(naturalDeceleration);
+        return this;
+    }
     
     public FollowerConfig stopIfVoltageBelow(double stopIfVoltageBelow) {
         this.stopIfVoltageBelow = Validator.ensurePositiveSign(stopIfVoltageBelow);
@@ -56,7 +73,7 @@ public class FollowerConfig {
      * the correct direction. Error is in radians.
      * Recommended starting values: headingPID(2, 0, 0.1)
      */
-    public FollowerConfig headingPID(PIDController headingPID) {
+    public FollowerConfig headingPID(ErrorController headingPID) {
         this.headingPID = headingPID;
         return this;
     }
@@ -78,7 +95,8 @@ public class FollowerConfig {
      * Is only needed to follow velocity profiles and velocity constraints. Not necessary
      * for maximum robot speed.
      */
-    public FollowerConfig driveVelocityController(VelocityController driveVelocityPIDF) {
+    public FollowerConfig driveVelocityController(
+        ErrorController driveVelocityPIDF) {
         this.driveVelocityPIDF = driveVelocityPIDF;
         return this;
     }

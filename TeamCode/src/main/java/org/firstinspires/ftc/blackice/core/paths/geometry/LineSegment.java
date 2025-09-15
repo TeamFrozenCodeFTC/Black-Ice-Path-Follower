@@ -30,4 +30,14 @@ public class LineSegment extends LinearGeometry {
         double distanceAlongPath = t * length;
         return new PathPoint(closestPoint, tangent, 0, distanceAlongPath, length - distanceAlongPath, t, t);
     }
+    
+    @Override
+    public LineSegment reversed() {
+        return new LineSegment(endPathPoint.point, startPoint);
+    }
+    
+    @Override
+    public LineSegment mirrored() {
+        return new LineSegment(startPoint.mirroredAcrossYAxis(), endPathPoint.point.mirroredAcrossYAxis());
+    }
 }

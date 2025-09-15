@@ -27,4 +27,20 @@ public class Path implements RoutineStep {
             headingInterpolator.interpolate(endPathPoint)
         );
     }
+
+    public Path reversed() {
+        return new Path(
+            geometry.reversed(),
+            headingInterpolator.reversed(),
+            behavior
+        );
+    }
+
+    public Path mirrored() {
+        return new Path(
+            geometry.mirrored(),
+            headingInterpolator.mirrored(),
+            behavior
+        );
+    }
 }

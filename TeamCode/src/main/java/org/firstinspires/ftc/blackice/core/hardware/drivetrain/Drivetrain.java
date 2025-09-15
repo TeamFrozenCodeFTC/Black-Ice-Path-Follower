@@ -2,6 +2,7 @@ package org.firstinspires.ftc.blackice.core.hardware.drivetrain;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.blackice.util.geometry.Vector;
 
@@ -12,50 +13,25 @@ import org.firstinspires.ftc.blackice.util.geometry.Vector;
  * d.applyPowers(d.getPowers()); // d.applyPowers cannot confirm d.getPowers is same type without
  * having the follower have a generic.
  */
-public abstract class Drivetrain {
-    public abstract void followVector(Vector robotVector, double turningPower,
+public interface Drivetrain {
+    void followVector(Vector robotVector, double turningPower,
                                       boolean isTeleOp);
     
-    public void followVector(Vector robotVector, double turningPower) {
+    default void followVector(Vector robotVector, double turningPower) {
         followVector(robotVector, turningPower, false);
     }
 
-    public final DcMotorEx[] motors;
+    /**
+     * When at zero power, internally brakes the wheels using regenerative braking and
+     * back-EMF.
+     * Does not seem to lower the voltage of the battery when braking with this.
+     */
+    void zeroPowerBrakeMode();
     
-    protected Drivetrain(DcMotorEx[] motors) {
-        this.motors = motors;
-    }
+    /**
+     * Makes the wheels coast when at zero power.
+     */
+    void zeroPowerFloatMode();
     
-    public void zeroPowerBrakeMode() {
-        for (DcMotorEx motor : motors) {
-            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        }
-    }
-
-    public void zeroPower() {
-        for (DcMotorEx motor : motors) {
-            motor.setPower(0);
-        }
-    }
-    
-    public void brakeWithZeroPowerBrakeMode() {
-        zeroPowerBrakeMode();
-        zeroPower();
-    }
-    
-    public void zeroPowerFloatMode() {
-        for (DcMotorEx motor : motors) {
-            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        }
-    }
-    public void disableAll() {
-        for (DcMotorEx motor : motors) {
-            motor.setMotorDisable();
-        }
-    }
-    public void enableAll() {
-        for (DcMotorEx motor : motors) {
-            motor.setMotorEnable();
-        }
-    }
+    void zeroPower();
 }

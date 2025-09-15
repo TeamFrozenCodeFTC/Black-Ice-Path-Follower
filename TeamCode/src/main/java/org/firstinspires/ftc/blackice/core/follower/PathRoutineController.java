@@ -2,7 +2,11 @@ package org.firstinspires.ftc.blackice.core.follower;
 
 import androidx.annotation.Nullable;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+
 import org.firstinspires.ftc.blackice.core.paths.PathBehavior;
+import org.firstinspires.ftc.blackice.core.paths.routines.PathRoutineBuilder;
 import org.firstinspires.ftc.blackice.util.actions.Action;
 import org.firstinspires.ftc.blackice.core.hardware.localization.MotionState;
 import org.firstinspires.ftc.blackice.util.actions.ActionLoop;
@@ -16,8 +20,10 @@ import org.firstinspires.ftc.blackice.core.hardware.drivetrain.Drivetrain;
 import org.firstinspires.ftc.blackice.util.Advancer;
 import org.firstinspires.ftc.blackice.util.Logger;
 
+import java.util.ArrayList;
+
 public class PathRoutineController {
-    private final DrivePowerController drivePowerController;
+    public final DrivePowerController drivePowerController;
     private final MotionTracker motionTracker;
     private final FollowingTimeouts followingTimeouts = new FollowingTimeouts();
     
@@ -30,29 +36,10 @@ public class PathRoutineController {
     private double previousPathPointTValue;
     private @Nullable Path currentPath;
     
-    public void useCentripetal(boolean useCentripetal) {
-        drivePowerController.useCentripetal = useCentripetal;
-    }
-    
-    public void useDrive(boolean useDrive) {
-        drivePowerController.useDrive = useDrive;
-    }
-    
-    public void useTranslational(boolean useTranslational) {
-        drivePowerController.useTranslational = useTranslational;
-    }
-    
-    public void useHeading(boolean useHeading) {
-        drivePowerController.useHeading = useHeading;
-    }
-    
-    public void setHeadingPID(boolean useHeading) {
-        drivePowerController.useHeading = useHeading;
-    }
-    
-    public void centripetalScaling(double scaling) {
-        drivePowerController.centripetalScaling = scaling;
-    }
+    ArrayList<Double> pathXValues;
+    ArrayList<Double> pathYValues;
+    ArrayList<Double> robotXValues;
+    ArrayList<Double> robotYValues;
     
     public enum FollowingState {
         /** The follower is currently following a path. */
@@ -117,7 +104,7 @@ public class PathRoutineController {
      * Starts following a PathRoutine. Overrides any previous unfinished pathRoutine.
      * Call follower.update() to continue following.
      */
-    public void startFollowing(PathRoutine pathRoutine) {
+    public void follow(PathRoutine pathRoutine) {
         routineAdvancer = new Advancer<>(pathRoutine.getSteps());
         hasBraked = false;
         startNextPath();
@@ -180,7 +167,7 @@ public class PathRoutineController {
         currentPath = path;
         
         followingState = FollowingState.FOLLOWING;
-        hasBraked = false;
+        drivePowerController.reset();
         previousPathPointTValue = 0;
         followingTimeouts.start();
         
@@ -239,8 +226,12 @@ public class PathRoutineController {
      * Stops following all path routines. Turns the robot on zero power brake mode and brakes.
      */
     public void stop() {
+        if (isIdle()) return;
+        
         followingState = FollowingState.IDLE;
-        drivePowerController.brakeWithZeroPowerBrakeMode();
+        drivePowerController.drivetrain.zeroPowerBrakeMode();
+        drivePowerController.drivetrain.zeroPower();
+        drivePowerController.reset();
         followingTimeouts.done();
         
         if (currentPath != null) {
@@ -256,11 +247,13 @@ public class PathRoutineController {
      * @return true/false whether or not the pause was successful
      */
     public boolean pause() {
-        if (!isCommandingPower() || currentPath == null) {
+        if (isPaused() || (!isCommandingPower() || currentPath == null)) {
             return false;
         }
         followingState = FollowingState.PAUSED;
-        drivePowerController.brakeWithZeroPowerBrakeMode();
+        drivePowerController.drivetrain.zeroPowerBrakeMode();
+        drivePowerController.drivetrain.zeroPower();
+        drivePowerController.reset();
         followingTimeouts.pause();
         getCurrentActionLoop().pause();
         return true;
@@ -272,10 +265,12 @@ public class PathRoutineController {
      * @return true/false whether or not the resume was successful
      */
     public boolean resume() {
-        if (followingState != FollowingState.PAUSED) {
+        if (!isPaused()) {
             return false;
         }
         followingState = FollowingState.FOLLOWING;
+        drivePowerController.drivetrain.zeroPowerFloatMode();
+        drivePowerController.reset();
         followingTimeouts.resume();
         getCurrentActionLoop().resume();
         return true;
@@ -286,7 +281,18 @@ public class PathRoutineController {
      * This means the follower is not yet finished and has not been canceled.
      */
     public boolean isInProgress() {
-        return followingState != FollowingState.DONE && followingState != FollowingState.IDLE;
+        return !isDone() && !isIdle();
+    }
+    
+    /**
+     * Simulates a loop to initialize logging tags but doesn't actually power the wheels
+     */
+    private void initializeLoggingTagsBySimulatingUpdate() {
+        follow(new PathRoutineBuilder(() -> new Pose(0, 0, 0)).lineTo(1, 0).build());
+        update();
+        stop();
+        drivePowerController.drivetrain.zeroPowerFloatMode();
+        drivePowerController.drivetrain.zeroPower();
     }
     
     /**
@@ -325,8 +331,34 @@ public class PathRoutineController {
             }
             startNextPath();
         }
-        Logger.debug("XXX currentPosition", motionState.position);
-        Logger.debug("XXX closestPointToRobot", closestPathPoint.point);
+    }
+    
+    private void updateDashboardDrawingPoints() {
+        final double radius = 3;
+        
+        TelemetryPacket packet = new TelemetryPacket();
+        packet.fieldOverlay()
+            .setStroke("white")
+            .strokePolyline(
+                pathXValues.stream().mapToDouble(Double::doubleValue).toArray(),
+                pathYValues.stream().mapToDouble(Double::doubleValue).toArray()
+            )
+            .setStroke("blue")
+            .strokePolyline(
+                robotXValues.stream().mapToDouble(Double::doubleValue).toArray(),
+                robotYValues.stream().mapToDouble(Double::doubleValue).toArray()
+            )
+            .setFill("green")
+            .fillCircle(robotXValues.get(robotXValues.size() - 1),
+                        robotYValues.get(robotYValues.size() - 1), radius)
+            .strokeLine(
+                motionState.position.getX(),
+                motionState.position.getY(),
+                motionState.position.getX() + radius * Math.cos(motionState.heading),
+                motionState.position.getY() + radius * Math.sin(motionState.heading)
+            );
+        
+        FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }
     
     private void follow(MotionState motionState) {
@@ -334,6 +366,13 @@ public class PathRoutineController {
             motionState.nextPosition,
             previousPathPointTValue
         );
+        
+        pathXValues.add(closestPathPoint.point.getX());
+        pathYValues.add(closestPathPoint.point.getY());
+        robotXValues.add(motionState.nextPosition.getX());
+        robotYValues.add(motionState.nextPosition.getY());
+        updateDashboardDrawingPoints();
+        
         previousPathPointTValue = closestPathPoint.tValue;
         
         pathState = new PathState(getCurrentPath(), closestPathPoint, motionState);
@@ -341,10 +380,9 @@ public class PathRoutineController {
         Logger.debug("distanceRemaining", closestPathPoint.distanceRemaining);
         Logger.debug("nextPosition", motionState.nextPosition);
         
-        DrivePowerController.BrakingStatus brakingStatus =
-            drivePowerController.isBraking(pathState, hasBraked);
+        drivePowerController.evaluateBraking(pathState);
         
-        if (brakingStatus.isBraking) {
+        if (drivePowerController.isBraking) {
             Logger.debug("isBraking -------------------");
             if (getCurrentPath().behavior.stop == PathBehavior.StopMode.NONE) {
                 drivePowerController.drivetrain.zeroPower();
@@ -361,7 +399,7 @@ public class PathRoutineController {
             }
         }
         
-        drivePowerController.drive(pathState, brakingStatus);
+        drivePowerController.drive(pathState);
     }
     
     public FollowingState getFollowingState() {

@@ -12,4 +12,7 @@ public interface PathGeometry {
     double length();
 
     PathPoint getEndPathPoint();
+    
+    PathGeometry reversed();
+    PathGeometry mirrored();
 }

@@ -34,6 +34,12 @@ public class PathRoutine {
         this.amountOfSteps = this.steps.size();
     }
     
+    public PathRoutine reversed() {
+        List<RoutineStep> reversedSteps = new ArrayList<>(this.steps);
+        Collections.reverse(reversedSteps);
+        return new PathRoutine(reversedSteps);
+    }
+    
     public static PathRoutine empty() {
         return new PathRoutine(Collections.emptyList());
     }

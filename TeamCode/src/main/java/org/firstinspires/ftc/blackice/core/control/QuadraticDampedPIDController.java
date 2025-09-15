@@ -7,33 +7,27 @@ package org.firstinspires.ftc.blackice.core.control;
  * term to help stop more smoothly because EMF braking is not perfectly quadratic or linear.
  * Also is predictive because D term compensates for predictedPosition = position + velocity * deltaTime.
  */
-public class QuadraticDampedPIDController extends PIDController {
-    private double kBraking;
-    private double kFriction;
+public class QuadraticDampedPIDController extends PIDFController {
+    public double kBraking;
+    public double kFriction;
+    public double kStaticFriction;
     
     public QuadraticDampedPIDController(double kP, double kLinearBraking,
-                                        double kQuadraticFriction) {
-        super(kP, 0, 0);
+                                        double kQuadraticFriction, double kStaticFriction) {
+        super(kP, 0, 0, Feedforward.zero());
         this.kBraking = kLinearBraking;
         this.kFriction = kQuadraticFriction;
+        this.kStaticFriction = kStaticFriction;
     }
     
     @Override
-    public double runFromError(double error, double derivative) {
+    public double runFromVelocity(double error, double derivative) {
         double velocity = -derivative;
         double predictedBrakingDisplacement = velocity * Math.abs(velocity) * kFriction + velocity *
-            kBraking;
-        return super.runFromError(
+            kBraking + kStaticFriction * Math.signum(velocity);
+        return super.runFromVelocity(
             error - predictedBrakingDisplacement,
             derivative
         );
-    }
-    
-    public QuadraticDampedPIDController setCoefficients(double kP, double kLinearBraking,
-                                          double kQuadraticFriction) {
-        this.kP = kP;
-        this.kBraking = kLinearBraking;
-        this.kFriction = kQuadraticFriction;
-        return this;
     }
 }

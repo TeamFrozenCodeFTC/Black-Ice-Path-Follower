@@ -43,6 +43,11 @@ public class Vector extends OperableComponents<Vector> {
         return new Vector(-getY(), getX());
     }
     
+    public Vector mirroredAcrossYAxis() {
+        // Field width is 144 inches
+        new Vector(144 - getX(), getY());
+    }
+    
     /**
      * Creates a vector with the same x and y values from a scalar.
      * <pre><code>

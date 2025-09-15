@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.blackice.core.follower;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.ValueProvider;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
+import org.firstinspires.ftc.blackice.util.DashboardUtils;
 import org.firstinspires.ftc.blackice.util.geometry.Pose;
 import org.firstinspires.ftc.blackice.util.geometry.Vector;
 import org.firstinspires.ftc.blackice.core.paths.PathBehavior;
@@ -11,6 +14,7 @@ import org.firstinspires.ftc.blackice.core.hardware.drivetrain.Drivetrain;
 import org.firstinspires.ftc.blackice.FollowerConstants;
 import org.firstinspires.ftc.blackice.util.Logger;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -34,8 +38,7 @@ public class Follower extends PathRoutineController {
     public final Pose startingPose;
     
     private final double pauseWhenVoltageBelow;
-    private final List<VoltageSensor> voltageSensors;
-    
+
     private boolean lowVoltage = false;
     private double voltage = 0;
     
@@ -54,7 +57,10 @@ public class Follower extends PathRoutineController {
                 config.driveVelocityPIDF,
                 config.centripetalFeedforward,
                 config.maxReversalBrakingPower,
-                config.drivetrainConfig.build(hardwareMap)
+                config.drivetrainConfig.build(hardwareMap),
+                config.naturalDeceleration,
+                config.tunedVoltage,
+                hardwareMap.getAll(VoltageSensor.class).iterator().next()
             ), config.localizerConfig.createMotionTracker(hardwareMap)
         );
         this.drivetrain = getDrivetrain();
@@ -64,7 +70,8 @@ public class Follower extends PathRoutineController {
 
         this.defaultPathBehavior = config.defaultPathBehavior;
         this.pauseWhenVoltageBelow = config.stopIfVoltageBelow;
-        this.voltageSensors = hardwareMap.getAll(VoltageSensor.class);
+        
+        DashboardUtils.addPublicFieldsRecursive(this, "follower");
     }
     
     public Follower(HardwareMap hardwareMap, Pose startingPose) {
@@ -99,27 +106,21 @@ public class Follower extends PathRoutineController {
     }
     
     private void logVoltage() {
-        double result = Double.POSITIVE_INFINITY;
-        for (VoltageSensor sensor : voltageSensors) {
-            double voltage = sensor.getVoltage();
-            if (voltage > 0) {
-                result = Math.min(result, voltage);
-            }
-        }
-        if (result < pauseWhenVoltageBelow && !lowVoltage) {
+        double voltage = drivePowerController.getVoltage();
+
+        if (voltage < pauseWhenVoltageBelow && !lowVoltage) {
             pause();
             lowVoltage = true;
-            Logger.warn("LOW VOLTAGE:  " + result + ". PAUSING FOLLOWER");
+            Logger.warn("LOW VOLTAGE:  " + voltage + ". PAUSING FOLLOWER");
         }
-        else if (result < 10 && lowVoltage) {
+        else if (voltage < 10 && lowVoltage) {
             resume();
             lowVoltage = false;
-            Logger.warn("VOLTAGE BACK UP TO " + result + ". RESUMING FOLLOWER");
+            Logger.warn("VOLTAGE BACK UP TO " + voltage + ". RESUMING FOLLOWER");
         }
         else {
-            Logger.verbose("Voltage: ", result);
+            Logger.verbose("Voltage: ", voltage);
         }
-        voltage = result;
     }
     
     public void update() {
@@ -167,132 +168,8 @@ public class Follower extends PathRoutineController {
         drivetrain.followVector(new Vector(forward, lateral), turn, true);
     }
 }
-//    public void logVoltage() {
-//        double voltage = getVoltage();
-//        Logger.verbose("voltage", voltage);
-//        if (voltage < 7) {
-//            Logger.warn("LOW VOLTAGE WARNING of " + voltage + "v. CRASH INBOUND");
-//            Logger.warn("PREVENTING CRASH. CANCELING FOLLOWER");
-//            getCurrentActionLoop().cancel();
-//        }
-//    }
-    
 
 
-//    private final ActionLoop actionFollowingLoop = new ActionLoop();
-//
-//    /**
-//     * Continues and hold's the current path end pose until the condition is true.
-//     * <pre><code>
-//     * .holdUntil(() -> robot.getLiftPosition() > 100) // hold until lift is above 100
-//     * </code></pre>
-//     * If the condition is true before the path is finished, the robot will continue until it
-//     * reaches the end of the path.
-//     */
-//    public Follower holdUntil(Condition conditionIsTrue) {
-//        getCurrentPathExecutor().getActionLoop().canFinishWhen(conditionIsTrue);
-//        waitForPath();
-//        return this;
-//    }
-//
-//    /**
-//     * Cancel and stop following all paths when the condition is true.
-//     * <pre><code>
-//     * follower.cancelAllWhen(() -> robot.getLiftPosition() > 100) // stop when lift is above 100
-//     * </code></pre>
-//     * Will not return to following paths until the condition is false.
-//     */
-//    public Follower cancelAllWhen(Condition condition) {
-//        drivetrain.zeroPowerBrakeMode();
-//        drivetrain.zeroPower();
-//        actionFollowingLoop.cancelWhen(condition);
-//        return this;
-//    }
-//    /**
-//     * Cancel and stop following all paths when the condition is true and execute the action.
-//     * <pre><code>
-//     * follower.cancelAllWhen(gamepad1::x, gamepad1::rumble); // rumble the controller when X is pressed and cancel
-//     * </code></pre>
-//     */
-//    public Follower cancelAllWhen(Condition condition, Action action) {
-//        drivetrain.zeroPowerBrakeMode();
-//        drivetrain.zeroPower(); // this needs to be in the actual action
-//        actionFollowingLoop.cancelWhen(condition, action);
-//        return this;
-//    }
-//
-//    // update
-////    localizer.update();
-////    motionTracker.update();
-////    pathExecutor.updateDrivePowersToFollowPath(...);
-////
-////    if (actionLoop != null && actionLoop.isRunning()) {
-////        actionLoop.loop();
-////    }
-//
-//    /**
-//     * Calls the given action every loop while a path is being followed.
-//     * <pre><code>
-//     * follower.onUpdate(() -> myLift.updatePosition()) // update lift position while following
-//     * </code></pre>
-//     */
-//    public Follower whileFollowing(Action action) {
-//        actionFollowingLoop.onLoop(action);
-//        return this;
-//    }
-//
-//    /**
-//     * Executes the action when the condition is true.
-//     * <pre><code>
-//     * follower.doWhen(gamepad1::a, slide::raise); // raise slide whenever A is pressed
-//     * </code></pre>
-//     */
-//    public Follower doWhen(Condition condition, Action executable) {
-//        return this.whileFollowing(() -> executable.executeWhen(condition.isTrue()));
-//    }
-//
-//    // Not very many use cases for these:
-//    /**
-//     * Add an action to be executed when a path starts.
-//     */
-//    public Follower onPathStart(Action action) {
-//        actionFollowingLoop.onStart(action);
-//        return this;
-//    }
-//    /**
-//     * Add an action to be executed when the path successfully finishes. This includes early exits
-//     * but not cancellations.
-//     */
-//    public Follower onPathFinish(Action action) {
-//        actionFollowingLoop.onFinish(action);
-//        return this;
-//    }
-//    /**
-//     * When a path is canceled, either by an opMode stop, or other conditions like macro
-//     * cancelling buttons.
-//     */
-//    public Follower onPathCancel(Action action) {
-//        actionFollowingLoop.onCancel(action);
-//        return this;
-//    }
-//    /**
-//     * When the path is exited, either by successfully finishing or canceling.
-//     */
-//    public Follower onPathExit(Action action) {
-//        actionFollowingLoop.onExit(action);
-//        return this;
-//    }
-//
-//    public void waitUntilOpModeStop() {
-//        waitUntil(Condition.NEVER);
-//    }
-//
-////    public void waitUntil(Condition condition) {
-////        while (opMode.opModeIsActive() && !condition.isTrue()) {
-////            opMode.idle();
-////        }
-////    }
-//
 //    /**
 //     * Initializes the robot for tele-op mode,
 //     * using the position from the end of the autonomous period.
@@ -356,44 +233,4 @@ public class Follower extends PathRoutineController {
 //    public void robotCentricDrive(double y, double x, double turn) {
 //        updateMotionState();
 //        drivetrain.followVector(new Vector(x, y), turn);
-//    }
-
-//
-//    private FollowingState handleBraking() {
-//        if (!pathAdvancer.isDone()) {
-//            advance();
-//            return FollowingState.FOLLOWING;
-//        }
-//        if (getCurrentPath().behavior.stopAtEnd) {
-//            return FollowingState.BRAKING;
-//        }
-//        // does not listen to actionLoop canFinish because the
-//        // robot is keeping it's momentum and cannot hold a point
-//        combinedLoop.finish();
-//        return FollowingState.DONE; // go to next path as fast as possible
-//    }
-//
-//    private FollowingState applyBraking(DrivePowerController.BrakingStatus brakingStatus) {
-//
-//        if (hasStoppedAtSegmentEnd(pathState.motionState)) { // + is within error margin +
-//            // heading is aligned OR when drive powers are less than 0.1 or something
-//            state = FollowingState.HOLDING;
-//
-//            if (!pathAdvancer.isDone()) {
-//                advance();
-//                return FollowingState.FOLLOWING;
-//            }
-//            if (combinedLoop.canFinish()) {
-//                combinedLoop.finish();
-//                return FollowingState.DONE;
-//            }
-//            Logger.debug("holding -------------------");
-//
-//            // pause
-//            // cancel = pause and restart state
-//        }
-//
-//        drivePowersCalculator.drive(drivetrain, pathState, brakingStatus);
-//
-//        return state;
 //    }

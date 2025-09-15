@@ -22,4 +22,14 @@ public class ToPointTarget extends LinearGeometry {
         
         return new PathPoint(endPathPoint.point, tangent, 0, distanceAlongPath, distanceRemaining, percentAlong, percentAlong);
     }
+    
+    @Override
+    public PathGeometry reversed() {
+        return new ToPointTarget(endPathPoint.point, startPoint);
+    }
+    
+    @Override
+    public ToPointTarget mirrored() {
+        return new ToPointTarget(startPoint.mirroredAcrossYAxis(), endPathPoint.point.mirroredAcrossYAxis());
+    }
 }
