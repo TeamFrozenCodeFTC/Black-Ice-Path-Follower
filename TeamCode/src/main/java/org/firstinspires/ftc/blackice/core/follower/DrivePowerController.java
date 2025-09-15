@@ -256,7 +256,7 @@ public class DrivePowerController {
         if (useTranslational && remainingSq > 0) {
             translationalPower = computePerpendicularCorrectionVector(pathState);
             remainingSq = consumeRemaining(remainingSq,
-                                           translationalPower.lengthSquared();
+                                           translationalPower.lengthSquared());
         }
         if (useHeading && remainingSq > 0) {
             double targetHeading =
